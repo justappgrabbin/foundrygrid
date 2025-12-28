@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FOUNDRY Constitutional Layer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+  <link rel="stylesheet" href="foundry-styles.css">
+</head>
+<body>
+
+<div id="foundry-interface">
+  <h1>⚡ FOUNDRY Constitutional Layer</h1>
+  <div class="status">Status: <span id="status">INITIALIZING</span></div>
+  <div class="status">Configurations: <span id="config-count">0</span></div>
+  <div class="status">Books Loaded: <span id="book-count">0</span></div>
+  
+  <h2>Four Pillars</h2>
+  <div class="law">
+    <strong>CORE:</strong> Ontological truth (causal graph)<br>
+    <strong>SELECTOR:</strong> Resonance matching<br>
+    <strong>BUILDER:</strong> Configuration assembly<br>
+    <strong>OVERSEER:</strong> Constitutional guardian
+  </div>
+  
+  <h2>Sentence System Law</h2>
+  <div class="law">
+    CI = Λ · (α · D · G · C · (1 - e^(-βτ)))<br>
+    <small>Where Λ is 13-place planetary weight<br>
+    Structures: Simple → Mirror → Nested → Binary</small>
+  </div>
+  
+  <h2>Libraries</h2>
+  <div class="library-stats" id="library-stats">
+    Raw Materials: Ready<br>
+    Completed Pieces: 0<br>
+    Books: 0 chunks indexed<br>
+    Evolutions: 0 applied
+  </div>
+  
+  <h2>Load Book</h2>
+  <input type="file" id="book-upload" accept=".txt,.md">
+  <label for="book-upload" class="upload-label">📚 Upload Book</label>
+  <div id="book-list"></div>
+  
+  <h2>🏗️ Build App/Game/Tool</h2>
+  <input type="file" id="app-upload" accept=".txt,.md,.html,.js,.py,.json">
+  <label for="app-upload" class="upload-label">📤 Upload Spec/Code</label>
+  
+  <div style="margin: 15px 0;">
+    <label style="font-size: 11px;">Or describe what you want:</label>
+    <textarea id="app-description" placeholder="e.g., 'Make a 2D space shooter game' or 'Create a photo editor with filters'" rows="3"></textarea>
+    <button onclick="ui.buildFromDescription()">🏗️ Build From Description</button>
+  </div>
+  
+  <button onclick="ui.viewTemplates()">📋 View Templates</button>
+  <button onclick="ui.viewBuildHistory()">📜 Build History</button>
+  
+  <div id="app-output" class="output-box" style="display: none;"></div>
+  
+  <h2>Generate Configuration</h2>
+  <input type="text" id="user-name" placeholder="Name (optional)">
+  
+  <div style="margin: 10px 0;">
+    <label style="font-size: 11px;">Primary Gates (comma-separated):</label>
+    <input type="text" id="user-gates" placeholder="e.g., 25, 51, 10">
+  </div>
+  
+  <textarea id="consciousness-input" placeholder="Describe consciousness state or paste chart data..." rows="4"></textarea>
+  
+  <button onclick="ui.generateConfiguration()">⚡ Generate App</button>
+  <button onclick="ui.analyzeSentenceSystem()">📊 Sentence Analysis</button>
+  
+  <div id="analysis-output" class="output-box" style="display: none;"></div>
+  <div id="config-output" class="output-box" style="display: none;"></div>
+  
+  <h2>Library</h2>
+  <button onclick="ui.viewConfigurations()">👁️ View Configs</button>
+  <button onclick="ui.searchBooks()">🔍 Search Books</button>
+  
+  <h2>🌊 Resonance Calculator</h2>
+  <p style="font-size: 11px;">Compare two consciousness profiles</p>
+  <button onclick="ui.showResonanceForm()">Calculate Resonance</button>
+  <button onclick="ui.findMatches()">🔍 Find Matches</button>
+  <button onclick="ui.formOptimalGroup()">👥 Form Group</button>
+  
+  <div id="resonance-output" class="output-box" style="display: none;"></div>
+  
+  <h2>🧬 Self-Evolution</h2>
+  <div class="status">Evolution Mode: <span style="color: #ff00ff;">ACTIVE</span></div>
+  <button onclick="ui.viewSuggestions()">💡 View Suggestions</button>
+  <button onclick="ui.analyzeProjectorSpace()">🎯 Analyze Projector Space</button>
+  <button onclick="ui.viewEvolutionHistory()">📊 Evolution History</button>
+  
+  <div id="library-output" class="output-box" style="display: none;"></div>
+  <div id="evolution-output" class="output-box" style="display: none;"></div>
+</div>
+
+<div id="canvas-container"></div>
+
+<!-- Load libraries in dependency order -->
+<script src="lib-raw-materials.js"></script>
+<script src="lib-sentence-engine.js"></script>
+<script src="lib-resonance-engine.js"></script>
+<script src="lib-books.js"></script>
+<script src="lib-four-pillars.js"></script>
+<script src="lib-self-evolution.js"></script>
+<script src="lib-universal-builder.js"></script>
+
+<!-- Load core system -->
+<script src="foundry-core.js"></script>
+
+<!-- Load UI -->
+<script src="foundry-ui.js"></script>
+
+<!-- Initialize -->
+<script>
+let foundry;
+let ui;
+
+function setup() {
+  // Initialize Foundry system
+  foundry = new FoundrySystem();
+  
+  // Initialize UI
+  ui = new FoundryUI(foundry);
+  
+  // Setup p5.js canvas for visualization
+  const canvas = createCanvas(windowWidth, windowHeight);
+  canvas.parent('canvas-container');
+  
+  console.log('🔮 Foundry Ready');
+}
+
+function draw() {
+  background(10, 10, 10, 25);
+  
+  // Draw causal graph visualization
+  const graphData = foundry.core.exportGraph();
+  const nodes = graphData.nodes;
+  
+  if (nodes.length === 0) return;
+  
+  stroke(0, 255, 136, 100);
+  strokeWeight(1);
+  noFill();
+  
+  for (let i = 0; i < nodes.length; i++) {
+    const [id, node] = nodes[i];
+    const x = width / 2 + cos(i * TWO_PI / nodes.length) * 200;
+    const y = height / 2 + sin(i * TWO_PI / nodes.length) * 200;
+    
+    circle(x, y, 20);
+    
+    // Draw connections
+    if (node.parent) {
+      const parentIndex = nodes.findIndex(([nid, _]) => nid === node.parent.id);
+      if (parentIndex >= 0) {
+        const px = width / 2 + cos(parentIndex * TWO_PI / nodes.length) * 200;
+        const py = height / 2 + sin(parentIndex * TWO_PI / nodes.length) * 200;
+        line(x, y, px, py);
+      }
+    }
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+</script>
+
+</body>
+</html>

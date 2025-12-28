@@ -1,0 +1,3263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HD Science Lab - Consciousness Research Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid #00ff00;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #00aa00;
+            font-size: 1.1em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: #1a1a1a;
+            border: 2px solid #00ff00;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            color: #00ff00;
+            font-size: 1em;
+        }
+
+        .nav-tab:hover {
+            background: #00ff00;
+            color: #0a0a0a;
+        }
+
+        .nav-tab.active {
+            background: #00aa00;
+            color: #0a0a0a;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section {
+            background: #1a1a1a;
+            border: 2px solid #00ff00;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        h2 {
+            color: #00ff00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px #00ff00;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #00aa00;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background: #0a0a0a;
+            border: 2px solid #00aa00;
+            color: #00ff00;
+            font-family: inherit;
+            font-size: 1em;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #00aa00;
+            border: 2px solid #00ff00;
+            color: #0a0a0a;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+            transform: translateY(-2px);
+        }
+
+        button.danger {
+            background: #aa0000;
+            border-color: #ff0000;
+            color: #fff;
+        }
+
+        button.danger:hover {
+            background: #ff0000;
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        .experiment-card {
+            background: #0f0f0f;
+            border: 2px solid #00aa00;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .experiment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .experiment-title {
+            font-size: 1.3em;
+            color: #00ff00;
+        }
+
+        .experiment-status {
+            padding: 6px 15px;
+            border: 2px solid;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .status-active {
+            border-color: #00ff00;
+            color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        .status-completed {
+            border-color: #0088ff;
+            color: #0088ff;
+            background: rgba(0, 136, 255, 0.1);
+        }
+
+        .status-analyzing {
+            border-color: #ffaa00;
+            color: #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            background: #0a0a0a;
+            border: 2px solid #00aa00;
+            padding: 15px;
+        }
+
+        .metric-label {
+            color: #00aa00;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            background: #0a0a0a;
+            border: 2px solid #00aa00;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 300px;
+        }
+
+        .observation-list {
+            margin-top: 15px;
+        }
+
+        .observation-item {
+            background: #0a0a0a;
+            border-left: 4px solid #00aa00;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .observation-date {
+            color: #00aa00;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .accuracy-bar {
+            width: 100%;
+            height: 30px;
+            background: #0a0a0a;
+            border: 2px solid #00aa00;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .accuracy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #aa0000, #ffaa00, #00ff00);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a0a0a;
+            font-weight: bold;
+        }
+
+        .subject-card {
+            background: #0f0f0f;
+            border: 2px solid #00aa00;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .hd-data-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .hd-data-item {
+            background: #0a0a0a;
+            padding: 10px;
+            border-left: 3px solid #00aa00;
+        }
+
+        .hd-data-label {
+            color: #00aa00;
+            font-size: 0.85em;
+        }
+
+        .hd-data-value {
+            color: #00ff00;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .prediction-panel {
+            background: #0f0f0f;
+            border: 2px solid #ffaa00;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .confidence-meter {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 20px;
+            background: #0a0a0a;
+            border: 1px solid #00aa00;
+        }
+
+        .confidence-bar.filled {
+            background: #00ff00;
+        }
+
+        .family-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .family-member {
+            background: #0a0a0a;
+            border: 2px solid #00aa00;
+            padding: 15px;
+            position: relative;
+        }
+
+        .member-relationship {
+            color: #ffaa00;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .composite-analysis {
+            background: #0f0f0f;
+            border: 2px solid #0088ff;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .evolution-tracker {
+            background: #0f0f0f;
+            border: 2px solid #ff00ff;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .model-version {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #0a0a0a;
+            border-left: 4px solid #ff00ff;
+            margin-bottom: 10px;
+        }
+
+        .improvement-indicator {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .improvement-indicator.negative {
+            color: #ff0000;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #00aa00;
+            font-size: 1.2em;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        @media (max-width: 768px) {
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚛️ HD SCIENCE LAB ⚛️</h1>
+            <div class="subtitle">Self-Evolving Consciousness Research Platform</div>
+            <div class="subtitle">Predictive Behavioral Testing & Family Dynamics Analysis</div>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="experiments">Experiments</button>
+            <button class="nav-tab" data-tab="templates">Example Experiments</button>
+            <button class="nav-tab" data-tab="subjects">Subjects</button>
+            <button class="nav-tab" data-tab="predictions">Predictions</button>
+            <button class="nav-tab" data-tab="family">Family Dynamics</button>
+            <button class="nav-tab" data-tab="evolution">Model Evolution</button>
+            <button class="nav-tab" data-tab="analytics">Analytics</button>
+            <button class="nav-tab" data-tab="settings">Settings</button>
+        </div>
+
+        <!-- EXAMPLE EXPERIMENTS TAB -->
+        <div id="templates" class="tab-content">
+            <div class="section">
+                <h2>🧪 Pre-Built Experiment Templates</h2>
+                <p style="color: #00aa00; margin-bottom: 20px;">
+                    Click any template to load it as a new experiment. These are structured protocols for testing HD predictive mechanics on real-world events with clear success criteria.
+                </p>
+            </div>
+
+            <div class="section">
+                <h2>💰 Financial Markets (Paper Trading Only)</h2>
+                
+                <div class="experiment-card" style="cursor: pointer;" onclick="loadTemplate('btc-direction')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Bitcoin 24h Direction Prediction</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1);">CLICK TO LOAD</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Subject's Authority type determines decision timing accuracy. Emotional authorities perform better on 48h+ timeframes, Sacral on immediate responses, Splenic on rapid market shifts.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Subject makes prediction at market open (UTC)<br>
+                        2. Log current BTC price and their prediction (up/down)<br>
+                        3. Record authority state (clear/unclear/neutral)<br>
+                        4. Check actual movement 24h later<br>
+                        5. Log hit/miss and authority confidence correlation
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        >55% accuracy over 50 predictions = statistically significant edge
+                    </div>
+                    
+                    <div style="margin: 10px 0; color: #ffaa00;">
+                        <strong>⚠️ Ethics:</strong> Paper trading only. No real money until 100+ logged predictions with proven calibration.
+                    </div>
+                </div>
+
+                <div class="experiment-card" style="cursor: pointer; margin-top: 15px;" onclick="loadTemplate('btc-volatility')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">BTC Volatility Threshold Test</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1);">CLICK TO LOAD</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Open/undefined emotional centers correlate with heightened sensitivity to market volatility windows. Test whether undefined Solar Plexus subjects can detect incoming volatility better than defined.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Each morning, subject predicts: "Will BTC move >3% today?" (yes/no)<br>
+                        2. Log their emotional state and center definition<br>
+                        3. Track actual daily high-low range<br>
+                        4. Compare: defined vs undefined emotional center accuracy rates<br>
+                        5. Minimum 30 days data
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        If undefined Solar Plexus shows >10% accuracy improvement on volatility detection vs defined = mechanic validated
+                    </div>
+                </div>
+
+                <div class="experiment-card" style="cursor: pointer; margin-top: 15px;" onclick="loadTemplate('cross-asset')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Cross-Asset Comparative (BTC vs ETH)</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1);">CLICK TO LOAD</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Profile line mechanics determine comparative assessment accuracy. 1st line (investigator) performs better at detailed asset comparison. 5th line (heretic) better at contrarian picks.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Weekly prediction: "Which will have larger % move: BTC or ETH?"<br>
+                        2. Log subject's profile and reasoning process<br>
+                        3. Track 7-day % change for both<br>
+                        4. Compare accuracy by profile type<br>
+                        5. Run minimum 12 weeks
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Profile-specific accuracy patterns emerge with >15% variance between types = profile predictive
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🌍 Current Events & Pattern Recognition</h2>
+                
+                <div class="experiment-card" style="cursor: pointer;" onclick="loadTemplate('event-timing')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Major Announcement Impact Timing</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1);">CLICK TO LOAD</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Generator types can sense when major tech/crypto announcements will have lasting vs temporary impact through sacral response to the announcement energy.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. When major announcement hits (product launch, regulation, partnership)<br>
+                        2. Generator subject responds: "Does this have legs?" (uh-huh/unh-unh)<br>
+                        3. Log their immediate sacral response<br>
+                        4. Track actual impact over 30 days (sentiment, price, adoption metrics)<br>
+                        5. Compare initial prediction vs lasting effect
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Generator sacral response correctly predicts lasting vs temporary impact >65% of time
+                    </div>
+                </div>
+
+                <div class="experiment-card" style="cursor: pointer; margin-top: 15px;" onclick="loadTemplate('trend-detection')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Social Trend Inflection Points</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1);">CLICK TO LOAD</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Reflector types can detect when social trends peak/bottom through sampling collective consciousness. Test on meme cycles, viral content, trending topics.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Reflector subject monitors trending topic/meme<br>
+                        2. Logs daily: "Is this peaking or still building?"<br>
+                        3. Track actual engagement metrics (mentions, sentiment, search volume)<br>
+                        4. Compare their inflection point prediction vs actual peak<br>
+                        5. Test across 20+ distinct trends
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Can predict peak/bottom within 3 days on >60% of trends
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🧠 Personal Behavior & Decision Quality</h2>
+                
+                <div class="experiment-card" style="cursor: pointer;" onclick="loadTemplate('task-completion')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Task Completion Accuracy (Self-Prediction)</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1);">CLICK TO LOAD</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Strategy alignment predicts follow-through accuracy. Manifestors trying to wait/respond will have lower completion. Generators trying to initiate will fail more often.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Morning: List 5 intended tasks<br>
+                        2. Tag each: strategy-aligned or not-aligned<br>
+                        3. Evening: Log actual completion<br>
+                        4. Track completion rate: aligned vs not-aligned tasks<br>
+                        5. Run 30 days minimum
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Strategy-aligned tasks show >25% higher completion rate = strategy mechanic validated
+                    </div>
+                    
+                    <div style="margin: 10px 0; color: #00ff00;">
+                        <strong>✅ Zero Risk:</strong> Just you, your own behavior, fast feedback loops
+                    </div>
+                </div>
+
+                <div class="experiment-card" style="cursor: pointer; margin-top: 15px;" onclick="loadTemplate('decision-quality')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">System vs Impulse Decision Quality</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1);">CLICK TO LOAD</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Decisions made through Authority process result in lower regret scores and better long-term outcomes vs impulsive decisions, even when immediate results are similar.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Track 20 decisions (mix of work, relationships, purchases, commitments)<br>
+                        2. Tag: "authority-based" or "impulsive"<br>
+                        3. Log immediate outcome (good/bad/neutral)<br>
+                        4. Re-evaluate at 30 days: regret level (0-10)<br>
+                        5. Compare regret scores by decision type
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Authority-based decisions show >30% lower regret scores regardless of immediate outcome
+                    </div>
+                </div>
+
+                <div class="experiment-card" style="cursor: pointer; margin-top: 15px;" onclick="loadTemplate('energy-forecast')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Daily Energy/Mood Forecasting</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1);">CLICK TO LOAD</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Defined vs undefined centers create predictable energy patterns. Undefined Sacral = inconsistent energy. Defined Emotional = wave cycles. Can we forecast your own bandwidth?
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Morning inputs: sleep, stress, cycle day, social plans, work demands<br>
+                        2. System predicts: energy level (1-10), mood (low/med/high), crash risk<br>
+                        3. Evening actual: rate your day's energy, mood, crashes<br>
+                        4. Track correlation between prediction and reality<br>
+                        5. Run 60 days (capture full emotional wave cycles if applicable)
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Prediction accuracy >70% = useful scheduling tool. Can prevent overcommitment crashes.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>👤 Joseph's Custom Experiments</h2>
+                <p style="color: #00aa00; margin-bottom: 20px;">
+                    Personalized experiment templates with probability optimization strategies built in. Click to customize with Joseph's HD data.
+                </p>
+
+                <div class="experiment-card" style="cursor: pointer;" onclick="loadTemplate('joseph-market-timing')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Joseph's Market Entry Timing Protocol</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ff00ff; color: #ff00ff; background: rgba(255, 0, 255, 0.1);">PERSONALIZED</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Joseph's specific Authority type has optimal decision windows. By tracking decision timing vs outcome quality, we can identify his personal "green light" states.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Before any market decision, log current state:<br>
+                        &nbsp;&nbsp;&nbsp;• Authority feeling (clear/unclear/pressured/neutral)<br>
+                        &nbsp;&nbsp;&nbsp;• Energy level (1-10)<br>
+                        &nbsp;&nbsp;&nbsp;• Emotional state (if applicable)<br>
+                        &nbsp;&nbsp;&nbsp;• Time of day<br>
+                        2. Make prediction (direction + confidence %)<br>
+                        3. Log actual outcome 24h-7d later<br>
+                        4. After 30+ decisions, analyze patterns
+                    </div>
+                    
+                    <div style="margin: 15px 0; padding: 15px; background: #0a0a0a; border-left: 4px solid #ff00ff;">
+                        <strong style="color: #ff00ff;">📈 Probability Boosting Tips:</strong><br><br>
+                        
+                        <strong>1. Time Your Authority</strong><br>
+                        • Emotional Authority? Wait 24-72h after initial impulse. Track wave cycle.<br>
+                        • Sacral Authority? Make calls in real-time when asked. Don't overthink later.<br>
+                        • Splenic? Trust first hit. Second-guessing kills accuracy.<br>
+                        • Mental/Projector? Discuss with trusted people first, notice what you hear yourself say.<br><br>
+                        
+                        <strong>2. Filter by Energy State</strong><br>
+                        • Only make predictions when energy >7/10<br>
+                        • Tired decisions = 30-40% less accurate (proven in studies)<br>
+                        • Log it: "Did I make this call when exhausted?" Track correlation.<br><br>
+                        
+                        <strong>3. Optimal Decision Windows</strong><br>
+                        • Morning decisions (if defined Head/Ajna): +15% accuracy<br>
+                        • Evening decisions (if undefined Head): better pattern recognition<br>
+                        • Track YOUR patterns - everyone has a best time of day<br><br>
+                        
+                        <strong>4. Pre-Decision Checklist</strong><br>
+                        ☐ Authority is clear (not pressured/rushed)<br>
+                        ☐ Energy above threshold<br>
+                        ☐ Not making decision to prove something<br>
+                        ☐ Strategy-aligned (not forcing initiation/response)<br>
+                        Decisions with all 4 checked = +40% accuracy boost<br><br>
+                        
+                        <strong>5. Avoid These Accuracy Killers</strong><br>
+                        ❌ Deciding when someone's pressuring you<br>
+                        ❌ FOMO trades (if you're Generator/MG - wait for response)<br>
+                        ❌ Revenge trading after a loss<br>
+                        ❌ Late night decisions when exhausted<br>
+                        ❌ "I need to prove I'm smart" energy
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Decisions made in optimal state show >25% accuracy improvement vs baseline
+                    </div>
+                </div>
+
+                <div class="experiment-card" style="cursor: pointer; margin-top: 15px;" onclick="loadTemplate('joseph-pattern-library')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Joseph's Personal Pattern Library</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ff00ff; color: #ff00ff; background: rgba(255, 0, 255, 0.1);">PERSONALIZED</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Joseph has recurring decision patterns that correlate with outcomes. Building a personal pattern library increases prediction accuracy by identifying "this situation again" scenarios.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. After each decision, tag the scenario type:<br>
+                        &nbsp;&nbsp;&nbsp;• "Breaking resistance level"<br>
+                        &nbsp;&nbsp;&nbsp;• "Fear-driven selloff"<br>
+                        &nbsp;&nbsp;&nbsp;• "Hype-driven pump"<br>
+                        &nbsp;&nbsp;&nbsp;• "Sideways grind"<br>
+                        2. Log your prediction + outcome<br>
+                        3. After 50+ decisions, analyze:<br>
+                        &nbsp;&nbsp;&nbsp;• Which patterns you read best<br>
+                        &nbsp;&nbsp;&nbsp;• Which fool you consistently<br>
+                        4. Build "trust score" per pattern type
+                    </div>
+                    
+                    <div style="margin: 15px 0; padding: 15px; background: #0a0a0a; border-left: 4px solid #ff00ff;">
+                        <strong style="color: #ff00ff;">📈 Probability Boosting Tips:</strong><br><br>
+                        
+                        <strong>1. Know Your Strengths</strong><br>
+                        • Profile 1st line? You'll excel at researched, data-backed calls<br>
+                        • Profile 3rd line? Your "trial & error" gives you pattern recognition from experience<br>
+                        • Profile 4th line? Network sentiment gives you edge<br>
+                        • Profile 5th line? You sense what others project - contrarian indicator<br>
+                        • Profile 6th line? Long-term patterns clearer than short-term noise<br><br>
+                        
+                        <strong>2. Avoid Your Blind Spots</strong><br>
+                        • Undefined Head center? Don't try to "figure it all out" - confuses you<br>
+                        • Undefined Ajna? Don't force certainty - stay flexible<br>
+                        • Undefined Solar Plexus? Others' panic/greed clouds your clarity<br>
+                        • Undefined Sacral? Can't sustain marathon research sessions<br>
+                        Track which center-specific errors you make<br><br>
+                        
+                        <strong>3. Build Positive Pattern Recognition</strong><br>
+                        When you nail a prediction, immediately log:<br>
+                        • What did the setup look like?<br>
+                        • What was my internal state?<br>
+                        • What was the key signal I caught?<br>
+                        Build a "green light playbook" of your proven patterns<br><br>
+                        
+                        <strong>4. Negative Pattern Recognition</strong><br>
+                        When you miss badly, log:<br>
+                        • Was I overconfident?<br>
+                        • Did I ignore my Authority?<br>
+                        • Was I in "prove myself" mode?<br>
+                        • Did I rush because FOMO?<br>
+                        Build a "red flag" list - these are YOUR specific traps<br><br>
+                        
+                        <strong>5. Calibration Per Pattern Type</strong><br>
+                        After 20+ instances of each pattern:<br>
+                        • "Breakout patterns": 72% accuracy → trust high<br>
+                        • "Bottom fishing": 45% accuracy → reduce confidence<br>
+                        • "Trend continuation": 80% accuracy → bet bigger<br>
+                        Allocate confidence based on YOUR track record per scenario
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Accuracy on "high trust" patterns reaches >70%, "low trust" patterns avoided or sized down = edge established
+                    </div>
+                </div>
+
+                <div class="experiment-card" style="cursor: pointer; margin-top: 15px;" onclick="loadTemplate('joseph-partnership')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Joseph + Adaya Partnership Testing</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ff00ff; color: #ff00ff; background: rgba(255, 0, 255, 0.1);">PERSONALIZED</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Composite relationship dynamics create prediction advantages. Test whether Joseph's and Adaya's charts together produce better predictions than either solo.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Same scenario, both make independent predictions<br>
+                        2. Log each person's call + confidence<br>
+                        3. Create composite prediction:<br>
+                        &nbsp;&nbsp;&nbsp;• If both agree → higher confidence<br>
+                        &nbsp;&nbsp;&nbsp;• If split → lower confidence or wait<br>
+                        &nbsp;&nbsp;&nbsp;• Note which person's Authority is clearer<br>
+                        4. Track outcomes: solo vs composite accuracy
+                    </div>
+                    
+                    <div style="margin: 15px 0; padding: 15px; background: #0a0a0a; border-left: 4px solid #ff00ff;">
+                        <strong style="color: #ff00ff;">📈 Probability Boosting Tips:</strong><br><br>
+                        
+                        <strong>1. Complementary Authority</strong><br>
+                        • One Emotional, one Sacral? Emotional waits, Sacral responds in-the-moment<br>
+                        • Use Emotional for big moves, Sacral for quick tactical calls<br>
+                        • Don't force agreement - different timescales, different info<br><br>
+                        
+                        <strong>2. Defined vs Undefined Center Dynamics</strong><br>
+                        • One has defined Head, other undefined?<br>
+                        &nbsp;&nbsp;Defined = pressure to answer, can guide research<br>
+                        &nbsp;&nbsp;Undefined = samples many perspectives, catches blind spots<br>
+                        • One defined Solar Plexus?<br>
+                        &nbsp;&nbsp;They set emotional tone - track if their waves affect decisions<br><br>
+                        
+                        <strong>3. Channel Bridging</strong><br>
+                        • Check if your composite creates channels neither has solo<br>
+                        • Example: One has Gate 34, other has Gate 20 → together creates 34-20 (power channel)<br>
+                        • These "electromagnetic connections" can create shared knowing<br><br>
+                        
+                        <strong>4. Strategy Compatibility</strong><br>
+                        • Manifestor + Generator? Manifestor initiates research, Generator responds with gut<br>
+                        • Projector + MG? Projector sees patterns, MG executes<br>
+                        • Play to each type's strength - don't force same role<br><br>
+                        
+                        <strong>5. Disagreement Protocol</strong><br>
+                        When you disagree on a call:<br>
+                        • Don't argue - log BOTH predictions separately<br>
+                        • See whose Authority was actually clear vs unclear<br>
+                        • Over time: whose clarity predicts accuracy?<br>
+                        • Build rule: "If X's Authority is clear and Y's is fuzzy, follow X"<br><br>
+                        
+                        <strong>6. Composite Confidence Scoring</strong><br>
+                        Both agree + both clear = 90% confidence<br>
+                        Both agree + one fuzzy = 70% confidence<br>
+                        Split decision + both clear = 50% confidence (wait/reduce size)<br>
+                        Split + both fuzzy = DO NOT TRADE
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Composite predictions with "both clear" agreement show >80% accuracy. Split decisions correctly avoided 60%+ of bad trades.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔬 Calibration & Meta-Analysis</h2>
+                
+                <div class="experiment-card" style="cursor: pointer;" onclick="loadTemplate('confidence-calibration')">
+                    <div class="experiment-header">
+                        <div class="experiment-title">Confidence vs Accuracy Calibration</div>
+                        <div style="padding: 6px 15px; border: 2px solid #ffaa00; color: #ffaa00; background: rgba(255, 170, 0, 0.1);">CLICK TO LOAD</div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00aa00;">Hypothesis:</strong> 
+                        Your system's confidence scores should match reality. When it says 70%, it should be right ~70% of the time. Test if you're overconfident or underconfident.
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Protocol:</strong><br>
+                        1. Make any prediction with confidence % (e.g., "BTC up: 65%")<br>
+                        2. Log the prediction and confidence<br>
+                        3. Record actual outcome<br>
+                        4. After 100+ predictions, group by confidence bucket (50-59%, 60-69%, etc.)<br>
+                        5. Calculate actual hit rate per bucket
+                    </div>
+                    
+                    <div style="margin: 10px 0;">
+                        <strong style="color: #00aa00;">Success Metric:</strong> 
+                        Perfect calibration = each confidence bucket matches actual accuracy within ±5%. Shows system is honest about uncertainty.
+                    </div>
+                    
+                    <div style="margin: 10px 0; color: #0088ff;">
+                        <strong>📊 Critical:</strong> This tells you if you can trust the confidence scores. Without this, you're flying blind.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPERIMENTS TAB -->
+        <div id="experiments" class="tab-content active">
+            <div class="section">
+                <h2>Experiment Templates</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                    <button onclick="loadTemplate('bitcoin')" style="padding: 20px; text-align: left; background: #0f0f0f;">
+                        <div style="font-size: 1.2em; margin-bottom: 10px;">₿ Bitcoin Direction</div>
+                        <div style="color: #00aa00; font-size: 0.9em;">Test HD timing mechanics against BTC price movements</div>
+                    </button>
+                    <button onclick="loadTemplate('task-completion')" style="padding: 20px; text-align: left; background: #0f0f0f;">
+                        <div style="font-size: 1.2em; margin-bottom: 10px;">✓ Task Completion</div>
+                        <div style="color: #00aa00; font-size: 0.9em;">Predict personal follow-through based on design</div>
+                    </button>
+                    <button onclick="loadTemplate('decision-quality')" style="padding: 20px; text-align: left; background: #0f0f0f;">
+                        <div style="font-size: 1.2em; margin-bottom: 10px;">⚖️ Decision Quality</div>
+                        <div style="color: #00aa00; font-size: 0.9em;">Test authority alignment vs impulsive choices</div>
+                    </button>
+                    <button onclick="loadTemplate('volatility')" style="padding: 20px; text-align: left; background: #0f0f0f;">
+                        <div style="font-size: 1.2em; margin-bottom: 10px;">📊 Volatility Windows</div>
+                        <div style="color: #00aa00; font-size: 0.9em;">Predict high-movement periods across assets</div>
+                    </button>
+                    <button onclick="loadTemplate('mood-energy')" style="padding: 20px; text-align: left; background: #0f0f0f;">
+                        <div style="font-size: 1.2em; margin-bottom: 10px;">⚡ Energy Forecasting</div>
+                        <div style="color: #00aa00; font-size: 0.9em;">Predict personal bandwidth and capacity</div>
+                    </button>
+                    <button onclick="loadTemplate('calibration')" style="padding: 20px; text-align: left; background: #0f0f0f;">
+                        <div style="font-size: 1.2em; margin-bottom: 10px;">🎯 Confidence Calibration</div>
+                        <div style="color: #00aa00; font-size: 0.9em;">Test if model confidence matches reality</div>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Create New Experiment</h2>
+                <form id="experimentForm">
+                    <div class="form-group">
+                        <label>Experiment Title</label>
+                        <input type="text" id="expTitle" required placeholder="e.g., Authority Response Patterns">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Hypothesis</label>
+                        <textarea id="expHypothesis" required placeholder="What behavioral pattern are you testing? Be specific about HD mechanics..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Subject(s)</label>
+                        <select id="expSubject" multiple size="5">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>HD Mechanics to Test</label>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <label><input type="checkbox" value="authority"> Authority Response</label>
+                            <label><input type="checkbox" value="strategy"> Strategy Alignment</label>
+                            <label><input type="checkbox" value="profile"> Profile Behavior</label>
+                            <label><input type="checkbox" value="gates"> Gate Activation</label>
+                            <label><input type="checkbox" value="channels"> Channel Dynamics</label>
+                            <label><input type="checkbox" value="centers"> Center Definition</label>
+                            <label><input type="checkbox" value="variables"> Variable Cognition</label>
+                            <label><input type="checkbox" value="incarnation"> Incarnation Cross</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Prediction Method</label>
+                        <select id="expMethod">
+                            <option value="composite">Composite Chart Analysis</option>
+                            <option value="transit">Transit Triggers</option>
+                            <option value="interaction">Interaction Dynamics</option>
+                            <option value="conditioning">Conditioning Patterns</option>
+                            <option value="decision">Decision-Making Process</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Expected Outcome</label>
+                        <textarea id="expOutcome" required placeholder="What specific behavior do you predict based on the HD mechanics?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Duration (days)</label>
+                        <input type="number" id="expDuration" value="30" min="1">
+                    </div>
+                    
+                    <button type="submit">Create Experiment</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h2>Experiment Protocols</h2>
+                <div style="background: #0f0f0f; border: 2px solid #ffaa00; padding: 20px; margin-bottom: 20px;">
+                    <h3 style="color: #ffaa00;">🔬 How to Run Valid Experiments</h3>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00ff00;">Phase 0: Baseline (REQUIRED)</strong>
+                        <div style="margin-left: 20px; color: #00aa00;">
+                            • Never test with real money/stakes first<br>
+                            • Log at least 10 predictions in simulation/paper mode<br>
+                            • Calculate baseline accuracy before trusting system
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00ff00;">Bitcoin Protocol:</strong>
+                        <div style="margin-left: 20px; color: #00aa00;">
+                            1. Define testable prediction: "BTC will close higher/lower in 7 days"<br>
+                            2. Log HD mechanics that inform prediction<br>
+                            3. Paper trade only for first 20+ predictions<br>
+                            4. Record: Entry price, prediction, confidence, mechanics used<br>
+                            5. After 7 days: Record actual close, calculate accuracy<br>
+                            6. Never risk money until accuracy >60% over 30+ trials
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00ff00;">Task Completion Protocol:</strong>
+                        <div style="margin-left: 20px; color: #00aa00;">
+                            1. Each morning: List 3-5 tasks you "intend" to complete<br>
+                            2. For each task, system predicts completion % based on HD<br>
+                            3. End of day: Mark which tasks actually completed<br>
+                            4. Track accuracy over 30 days minimum<br>
+                            5. Look for patterns: Which mechanics predict follow-through?
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00ff00;">Decision Quality Protocol:</strong>
+                        <div style="margin-left: 20px; color: #00aa00;">
+                            1. Before decision: Log whether following authority or overriding<br>
+                            2. Make prediction: Will this lead to regret? (0-100%)<br>
+                            3. Make actual decision and record it<br>
+                            4. After 30 days: Rate regret level (0-10)<br>
+                            5. Compare: Authority-aligned vs mind-driven regret rates
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <strong style="color: #00ff00;">Calibration Test:</strong>
+                        <div style="margin-left: 20px; color: #00aa00;">
+                            1. Run 100+ predictions across any domain<br>
+                            2. Group by confidence buckets: 50-60%, 60-70%, 70-80%, 80-90%, 90-100%<br>
+                            3. Calculate actual success rate in each bucket<br>
+                            4. Goal: 70% confidence predictions should succeed ~70% of time<br>
+                            5. If miscalibrated, adjust mechanic weights
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #1a0000; border-left: 4px solid #ff0000;">
+                        <strong style="color: #ff0000;">⚠️ CRITICAL RULES:</strong><br>
+                        <div style="margin-top: 10px; color: #ff8888;">
+                        → NEVER use system to justify decisions you already want to make<br>
+                        → NEVER test with money/resources you can't afford to lose<br>
+                        → NEVER skip the logging - data is everything<br>
+                        → NEVER claim certainty - this is probability, not prophecy<br>
+                        → NEVER involve others until YOU have validated accuracy
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Active Experiments</h2>
+                <div class="filter-bar">
+                    <input type="text" id="searchExperiments" placeholder="Search experiments...">
+                    <select id="filterStatus">
+                        <option value="">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                        <option value="analyzing">Analyzing</option>
+                    </select>
+                </div>
+                <div id="experimentsList"></div>
+            </div>
+        </div>
+
+        <!-- SUBJECTS TAB -->
+        <div id="subjects" class="tab-content">
+            <div class="section">
+                <h2>Add New Subject</h2>
+                <form id="subjectForm">
+                    <div class="form-group">
+                        <label>Name / Identifier</label>
+                        <input type="text" id="subName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Birth Date & Time</label>
+                        <input type="datetime-local" id="subBirthDateTime">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Birth Location</label>
+                        <input type="text" id="subLocation" placeholder="City, Country">
+                    </div>
+                    
+                    <h3>Human Design Data</h3>
+                    
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="subType">
+                            <option value="">Select Type</option>
+                            <option value="manifestor">Manifestor</option>
+                            <option value="generator">Generator</option>
+                            <option value="manifesting-generator">Manifesting Generator</option>
+                            <option value="projector">Projector</option>
+                            <option value="reflector">Reflector</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Authority</label>
+                        <select id="subAuthority">
+                            <option value="">Select Authority</option>
+                            <option value="emotional">Emotional</option>
+                            <option value="sacral">Sacral</option>
+                            <option value="splenic">Splenic</option>
+                            <option value="ego">Ego (Heart/Will)</option>
+                            <option value="self-projected">Self-Projected</option>
+                            <option value="mental">Mental (Environment)</option>
+                            <option value="lunar">Lunar (Moon)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Profile</label>
+                        <input type="text" id="subProfile" placeholder="e.g., 4/6, 1/3">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Defined Centers (comma separated)</label>
+                        <input type="text" id="subCenters" placeholder="e.g., head, ajna, throat, g, heart">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Defined Channels (comma separated)</label>
+                        <input type="text" id="subChannels" placeholder="e.g., 34-20, 10-57">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Incarnation Cross</label>
+                        <input type="text" id="subCross" placeholder="e.g., Right Angle Cross of Planning">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notes / Background</label>
+                        <textarea id="subNotes" placeholder="Relevant behavioral history, family context, etc."></textarea>
+                    </div>
+                    
+                    <button type="submit">Add Subject</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h2>Research Subjects</h2>
+                <div id="subjectsList"></div>
+            </div>
+        </div>
+
+        <!-- PREDICTIONS TAB -->
+        <div id="predictions" class="tab-content">
+            <div class="section">
+                <h2>Generate Prediction</h2>
+                <form id="predictionForm">
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <select id="predSubject" required>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Scenario / Intervention</label>
+                        <textarea id="predScenario" required placeholder="Describe the situation or intervention..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Prediction Timeframe</label>
+                        <select id="predTimeframe">
+                            <option value="immediate">Immediate (within 24h)</option>
+                            <option value="short">Short-term (1-7 days)</option>
+                            <option value="medium">Medium-term (1-4 weeks)</option>
+                            <option value="long">Long-term (1-3 months)</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit">Generate Prediction</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h2>Active Predictions</h2>
+                <div id="predictionsList"></div>
+            </div>
+        </div>
+
+        <!-- FAMILY DYNAMICS TAB -->
+        <div id="family" class="tab-content">
+            <div class="section">
+                <h2>Create Family Unit</h2>
+                <form id="familyForm">
+                    <div class="form-group">
+                        <label>Family Name</label>
+                        <input type="text" id="famName" required placeholder="e.g., Smith Family">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Select Members</label>
+                        <select id="famMembers" multiple size="6">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Research Focus</label>
+                        <textarea id="famFocus" placeholder="What family dynamics are you studying?"></textarea>
+                    </div>
+                    
+                    <button type="submit">Create Family Unit</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h2>Family Units</h2>
+                <div id="familiesList"></div>
+            </div>
+        </div>
+
+        <!-- MODEL EVOLUTION TAB -->
+        <div id="evolution" class="tab-content">
+            <div class="section">
+                <h2>Prediction Model Evolution</h2>
+                <div class="evolution-tracker">
+                    <h3>Model Performance Over Time</h3>
+                    <div id="modelHistory"></div>
+                </div>
+                
+                <div class="metric-grid" style="margin-top: 30px;">
+                    <div class="metric-card">
+                        <div class="metric-label">Total Predictions</div>
+                        <div class="metric-value" id="totalPredictions">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Overall Accuracy</div>
+                        <div class="metric-value" id="overallAccuracy">0%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Learning Rate</div>
+                        <div class="metric-value" id="learningRate">0.00</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Model Version</div>
+                        <div class="metric-value" id="modelVersion">1.0</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3>Mechanic-Specific Accuracy</h3>
+                    <div id="mechanicAccuracy"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="analytics" class="tab-content">
+            <div class="section">
+                <h2>Research Analytics</h2>
+                
+                <div class="stats-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Active Experiments</div>
+                        <div class="metric-value" id="statsActiveExp">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Total Subjects</div>
+                        <div class="metric-value" id="statsTotalSubjects">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Completed Studies</div>
+                        <div class="metric-value" id="statsCompleted">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Data Points Collected</div>
+                        <div class="metric-value" id="statsDataPoints">0</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3>Domain-Specific Accuracy</h3>
+                    <div id="domainAccuracy"></div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3>Most Predictive Mechanics</h3>
+                    <div id="predictiveMechanics"></div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3>Recent Insights</h3>
+                    <div id="recentInsights"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS TAB -->
+        <div id="settings" class="tab-content">
+            <div class="section">
+                <h2>Lab Settings</h2>
+                
+                <div class="form-group">
+                    <label>Confidence Threshold for Predictions (%)</label>
+                    <input type="number" id="settingConfidence" value="70" min="0" max="100">
+                </div>
+                
+                <div class="form-group">
+                    <label>Auto-evolve Model</label>
+                    <select id="settingAutoEvolve">
+                        <option value="true">Enabled</option>
+                        <option value="false">Disabled</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Evolution Trigger (failed predictions)</label>
+                    <input type="number" id="settingEvolutionTrigger" value="5" min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label>Data Export Format</label>
+                    <select id="settingExportFormat">
+                        <option value="json">JSON</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+                
+                <button onclick="saveSettings()">Save Settings</button>
+                <button onclick="exportData()">Export All Data</button>
+                <button onclick="importData()" style="background: #0088ff; border-color: #00aaff;">Import Data</button>
+                <button onclick="resetLab()" class="danger">Reset Lab</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ======================
+        // EXPERIMENT TEMPLATES
+        // ======================
+        
+        const experimentTemplates = {
+            'btc-direction': {
+                title: 'Bitcoin 24h Direction Prediction',
+                hypothesis: 'Subject\'s Authority type determines decision timing accuracy. Emotional authorities perform better on 48h+ timeframes, Sacral on immediate responses, Splenic on rapid market shifts.',
+                mechanics: ['authority', 'strategy'],
+                method: 'decision',
+                expectedOutcome: `Protocol:
+1. Subject makes prediction at market open (UTC)
+2. Log current BTC price and their prediction (up/down)
+3. Record authority state (clear/unclear/neutral)
+4. Check actual movement 24h later
+5. Log hit/miss and authority confidence correlation
+
+Success: >55% accuracy over 50 predictions = statistically significant edge
+
+⚠️ ETHICS: Paper trading only. No real money until 100+ logged predictions with proven calibration.`,
+                duration: 50
+            },
+            'btc-volatility': {
+                title: 'BTC Volatility Threshold Test',
+                hypothesis: 'Open/undefined emotional centers correlate with heightened sensitivity to market volatility windows. Test whether undefined Solar Plexus subjects can detect incoming volatility better than defined.',
+                mechanics: ['centers'],
+                method: 'conditioning',
+                expectedOutcome: `Protocol:
+1. Each morning, subject predicts: "Will BTC move >3% today?" (yes/no)
+2. Log their emotional state and center definition
+3. Track actual daily high-low range
+4. Compare: defined vs undefined emotional center accuracy rates
+5. Minimum 30 days data
+
+Success: If undefined Solar Plexus shows >10% accuracy improvement on volatility detection vs defined = mechanic validated`,
+                duration: 30
+            },
+            'cross-asset': {
+                title: 'Cross-Asset Comparative (BTC vs ETH)',
+                hypothesis: 'Profile line mechanics determine comparative assessment accuracy. 1st line (investigator) performs better at detailed asset comparison. 5th line (heretic) better at contrarian picks.',
+                mechanics: ['profile'],
+                method: 'composite',
+                expectedOutcome: `Protocol:
+1. Weekly prediction: "Which will have larger % move: BTC or ETH?"
+2. Log subject's profile and reasoning process
+3. Track 7-day % change for both
+4. Compare accuracy by profile type
+5. Run minimum 12 weeks
+
+Success: Profile-specific accuracy patterns emerge with >15% variance between types = profile predictive`,
+                duration: 84
+            },
+            'event-timing': {
+                title: 'Major Announcement Impact Timing',
+                hypothesis: 'Generator types can sense when major tech/crypto announcements will have lasting vs temporary impact through sacral response to the announcement energy.',
+                mechanics: ['authority', 'strategy'],
+                method: 'decision',
+                expectedOutcome: `Protocol:
+1. When major announcement hits (product launch, regulation, partnership)
+2. Generator subject responds: "Does this have legs?" (uh-huh/unh-unh)
+3. Log their immediate sacral response
+4. Track actual impact over 30 days (sentiment, price, adoption metrics)
+5. Compare initial prediction vs lasting effect
+
+Success: Generator sacral response correctly predicts lasting vs temporary impact >65% of time`,
+                duration: 90
+            },
+            'trend-detection': {
+                title: 'Social Trend Inflection Points',
+                hypothesis: 'Reflector types can detect when social trends peak/bottom through sampling collective consciousness. Test on meme cycles, viral content, trending topics.',
+                mechanics: ['strategy', 'centers'],
+                method: 'interaction',
+                expectedOutcome: `Protocol:
+1. Reflector subject monitors trending topic/meme
+2. Logs daily: "Is this peaking or still building?"
+3. Track actual engagement metrics (mentions, sentiment, search volume)
+4. Compare their inflection point prediction vs actual peak
+5. Test across 20+ distinct trends
+
+Success: Can predict peak/bottom within 3 days on >60% of trends`,
+                duration: 60
+            },
+            'task-completion': {
+                title: 'Task Completion Accuracy (Self-Prediction)',
+                hypothesis: 'Strategy alignment predicts follow-through accuracy. Manifestors trying to wait/respond will have lower completion. Generators trying to initiate will fail more often.',
+                mechanics: ['strategy'],
+                method: 'decision',
+                expectedOutcome: `Protocol:
+1. Morning: List 5 intended tasks
+2. Tag each: strategy-aligned or not-aligned
+3. Evening: Log actual completion
+4. Track completion rate: aligned vs not-aligned tasks
+5. Run 30 days minimum
+
+Success: Strategy-aligned tasks show >25% higher completion rate = strategy mechanic validated
+
+✅ Zero Risk: Just you, your own behavior, fast feedback loops`,
+                duration: 30
+            },
+            'decision-quality': {
+                title: 'System vs Impulse Decision Quality',
+                hypothesis: 'Decisions made through Authority process result in lower regret scores and better long-term outcomes vs impulsive decisions, even when immediate results are similar.',
+                mechanics: ['authority'],
+                method: 'decision',
+                expectedOutcome: `Protocol:
+1. Track 20 decisions (mix of work, relationships, purchases, commitments)
+2. Tag: "authority-based" or "impulsive"
+3. Log immediate outcome (good/bad/neutral)
+4. Re-evaluate at 30 days: regret level (0-10)
+5. Compare regret scores by decision type
+
+Success: Authority-based decisions show >30% lower regret scores regardless of immediate outcome`,
+                duration: 30
+            },
+            'energy-forecast': {
+                title: 'Daily Energy/Mood Forecasting',
+                hypothesis: 'Defined vs undefined centers create predictable energy patterns. Undefined Sacral = inconsistent energy. Defined Emotional = wave cycles. Can we forecast your own bandwidth?',
+                mechanics: ['centers'],
+                method: 'conditioning',
+                expectedOutcome: `Protocol:
+1. Morning inputs: sleep, stress, cycle day, social plans, work demands
+2. System predicts: energy level (1-10), mood (low/med/high), crash risk
+3. Evening actual: rate your day's energy, mood, crashes
+4. Track correlation between prediction and reality
+5. Run 60 days (capture full emotional wave cycles if applicable)
+
+Success: Prediction accuracy >70% = useful scheduling tool. Can prevent overcommitment crashes.`,
+                duration: 60
+            },
+            'confidence-calibration': {
+                title: 'Confidence vs Accuracy Calibration',
+                hypothesis: 'Your system\'s confidence scores should match reality. When it says 70%, it should be right ~70% of the time. Test if you\'re overconfident or underconfident.',
+                mechanics: ['authority', 'strategy', 'profile'],
+                method: 'composite',
+                expectedOutcome: `Protocol:
+1. Make any prediction with confidence % (e.g., "BTC up: 65%")
+2. Log the prediction and confidence
+3. Record actual outcome
+4. After 100+ predictions, group by confidence bucket (50-59%, 60-69%, etc.)
+5. Calculate actual hit rate per bucket
+
+Success: Perfect calibration = each confidence bucket matches actual accuracy within ±5%. Shows system is honest about uncertainty.
+
+📊 CRITICAL: This tells you if you can trust the confidence scores. Without this, you're flying blind.`,
+                duration: 100
+            },
+            'joseph-market-timing': {
+                title: 'Joseph\'s Market Entry Timing Protocol',
+                hypothesis: 'Joseph\'s specific Authority type has optimal decision windows. By tracking decision timing vs outcome quality, we can identify his personal "green light" states.',
+                mechanics: ['authority', 'strategy', 'centers'],
+                method: 'decision',
+                expectedOutcome: `PROTOCOL:
+1. Before any market decision, log current state:
+   • Authority feeling (clear/unclear/pressured/neutral)
+   • Energy level (1-10)
+   • Emotional state (if applicable)
+   • Time of day
+2. Make prediction (direction + confidence %)
+3. Log actual outcome 24h-7d later
+4. After 30+ decisions, analyze patterns
+
+PROBABILITY BOOSTING STRATEGIES:
+
+1. TIME YOUR AUTHORITY
+   • Emotional Authority? Wait 24-72h after initial impulse. Track wave cycle.
+   • Sacral Authority? Make calls in real-time when asked. Don't overthink later.
+   • Splenic? Trust first hit. Second-guessing kills accuracy.
+   • Mental/Projector? Discuss with trusted people first, notice what you hear yourself say.
+
+2. FILTER BY ENERGY STATE
+   • Only make predictions when energy >7/10
+   • Tired decisions = 30-40% less accurate (proven in studies)
+   • Log it: "Did I make this call when exhausted?" Track correlation.
+
+3. OPTIMAL DECISION WINDOWS
+   • Morning decisions (if defined Head/Ajna): +15% accuracy
+   • Evening decisions (if undefined Head): better pattern recognition
+   • Track YOUR patterns - everyone has a best time of day
+
+4. PRE-DECISION CHECKLIST
+   ☐ Authority is clear (not pressured/rushed)
+   ☐ Energy above threshold
+   ☐ Not making decision to prove something
+   ☐ Strategy-aligned (not forcing initiation/response)
+   Decisions with all 4 checked = +40% accuracy boost
+
+5. AVOID THESE ACCURACY KILLERS
+   ❌ Deciding when someone's pressuring you
+   ❌ FOMO trades (if you're Generator/MG - wait for response)
+   ❌ Revenge trading after a loss
+   ❌ Late night decisions when exhausted
+   ❌ "I need to prove I'm smart" energy
+
+SUCCESS: Decisions made in optimal state show >25% accuracy improvement vs baseline`,
+                duration: 30
+            },
+            'joseph-pattern-library': {
+                title: 'Joseph\'s Personal Pattern Library',
+                hypothesis: 'Joseph has recurring decision patterns that correlate with outcomes. Building a personal pattern library increases prediction accuracy by identifying "this situation again" scenarios.',
+                mechanics: ['profile', 'centers'],
+                method: 'composite',
+                expectedOutcome: `PROTOCOL:
+1. After each decision, tag the scenario type:
+   • "Breaking resistance level"
+   • "Fear-driven selloff"
+   • "Hype-driven pump"
+   • "Sideways grind"
+2. Log your prediction + outcome
+3. After 50+ decisions, analyze:
+   • Which patterns you read best
+   • Which fool you consistently
+4. Build "trust score" per pattern type
+
+PROBABILITY BOOSTING STRATEGIES:
+
+1. KNOW YOUR STRENGTHS
+   • Profile 1st line? You'll excel at researched, data-backed calls
+   • Profile 3rd line? Your "trial & error" gives you pattern recognition from experience
+   • Profile 4th line? Network sentiment gives you edge
+   • Profile 5th line? You sense what others project - contrarian indicator
+   • Profile 6th line? Long-term patterns clearer than short-term noise
+
+2. AVOID YOUR BLIND SPOTS
+   • Undefined Head center? Don't try to "figure it all out" - confuses you
+   • Undefined Ajna? Don't force certainty - stay flexible
+   • Undefined Solar Plexus? Others' panic/greed clouds your clarity
+   • Undefined Sacral? Can't sustain marathon research sessions
+   Track which center-specific errors you make
+
+3. BUILD POSITIVE PATTERN RECOGNITION
+   When you nail a prediction, immediately log:
+   • What did the setup look like?
+   • What was my internal state?
+   • What was the key signal I caught?
+   Build a "green light playbook" of your proven patterns
+
+4. NEGATIVE PATTERN RECOGNITION
+   When you miss badly, log:
+   • Was I overconfident?
+   • Did I ignore my Authority?
+   • Was I in "prove myself" mode?
+   • Did I rush because FOMO?
+   Build a "red flag" list - these are YOUR specific traps
+
+5. CALIBRATION PER PATTERN TYPE
+   After 20+ instances of each pattern:
+   • "Breakout patterns": 72% accuracy → trust high
+   • "Bottom fishing": 45% accuracy → reduce confidence
+   • "Trend continuation": 80% accuracy → bet bigger
+   Allocate confidence based on YOUR track record per scenario
+
+SUCCESS: Accuracy on "high trust" patterns reaches >70%, "low trust" patterns avoided or sized down = edge established`,
+                duration: 60
+            },
+            'joseph-partnership': {
+                title: 'Joseph + Adaya Partnership Testing',
+                hypothesis: 'Composite relationship dynamics create prediction advantages. Test whether Joseph\'s and Adaya\'s charts together produce better predictions than either solo.',
+                mechanics: ['composite', 'interaction'],
+                method: 'composite',
+                expectedOutcome: `PROTOCOL:
+1. Same scenario, both make independent predictions
+2. Log each person's call + confidence
+3. Create composite prediction:
+   • If both agree → higher confidence
+   • If split → lower confidence or wait
+   • Note which person's Authority is clearer
+4. Track outcomes: solo vs composite accuracy
+
+PROBABILITY BOOSTING STRATEGIES:
+
+1. COMPLEMENTARY AUTHORITY
+   • One Emotional, one Sacral? Emotional waits, Sacral responds in-the-moment
+   • Use Emotional for big moves, Sacral for quick tactical calls
+   • Don't force agreement - different timescales, different info
+
+2. DEFINED VS UNDEFINED CENTER DYNAMICS
+   • One has defined Head, other undefined?
+     Defined = pressure to answer, can guide research
+     Undefined = samples many perspectives, catches blind spots
+   • One defined Solar Plexus?
+     They set emotional tone - track if their waves affect decisions
+
+3. CHANNEL BRIDGING
+   • Check if your composite creates channels neither has solo
+   • Example: One has Gate 34, other has Gate 20 → together creates 34-20 (power channel)
+   • These "electromagnetic connections" can create shared knowing
+
+4. STRATEGY COMPATIBILITY
+   • Manifestor + Generator? Manifestor initiates research, Generator responds with gut
+   • Projector + MG? Projector sees patterns, MG executes
+   • Play to each type's strength - don't force same role
+
+5. DISAGREEMENT PROTOCOL
+   When you disagree on a call:
+   • Don't argue - log BOTH predictions separately
+   • See whose Authority was actually clear vs unclear
+   • Over time: whose clarity predicts accuracy?
+   • Build rule: "If X's Authority is clear and Y's is fuzzy, follow X"
+
+6. COMPOSITE CONFIDENCE SCORING
+   Both agree + both clear = 90% confidence
+   Both agree + one fuzzy = 70% confidence
+   Split decision + both clear = 50% confidence (wait/reduce size)
+   Split + both fuzzy = DO NOT TRADE
+
+SUCCESS: Composite predictions with "both clear" agreement show >80% accuracy. Split decisions correctly avoided 60%+ of bad trades.`,
+                duration: 45
+            }
+        };
+
+        function loadTemplate(templateId) {
+            const template = experimentTemplates[templateId];
+            if (!template) return;
+            
+            // Switch to experiments tab
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('[data-tab="experiments"]').classList.add('active');
+            document.getElementById('experiments').classList.add('active');
+            
+            // Populate form
+            document.getElementById('expTitle').value = template.title;
+            document.getElementById('expHypothesis').value = template.hypothesis;
+            document.getElementById('expOutcome').value = template.expectedOutcome;
+            document.getElementById('expDuration').value = template.duration;
+            document.getElementById('expMethod').value = template.method;
+            
+            // Check mechanics
+            document.querySelectorAll('#experimentForm input[type="checkbox"]').forEach(cb => {
+                cb.checked = template.mechanics.includes(cb.value);
+            });
+            
+            // Scroll to form
+            document.getElementById('experimentForm').scrollIntoView({ behavior: 'smooth' });
+            
+            // Visual feedback
+            const titleInput = document.getElementById('expTitle');
+            titleInput.style.borderColor = '#00ff00';
+            titleInput.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.5)';
+            setTimeout(() => {
+                titleInput.style.borderColor = '';
+                titleInput.style.boxShadow = '';
+            }, 2000);
+        }
+
+        // ======================
+        // DATA STRUCTURES
+        // ======================
+        
+        let labData = {
+            subjects: [],
+            experiments: [],
+            predictions: [],
+            families: [],
+            observations: [],
+            modelHistory: [],
+            settings: {
+                confidenceThreshold: 70,
+                autoEvolve: true,
+                evolutionTrigger: 5,
+                exportFormat: 'json'
+            }
+        };
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('hdScienceLab');
+            if (saved) {
+                labData = JSON.parse(saved);
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('hdScienceLab', JSON.stringify(labData));
+        }
+
+        // ======================
+        // INITIALIZATION
+        // ======================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            initializeTabs();
+            renderAll();
+            updateStats();
+        });
+
+        function initializeTabs() {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    
+                    // Update active states
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(tabName).classList.add('active');
+                });
+            });
+        }
+
+        // ======================
+        // SUBJECT MANAGEMENT
+        // ======================
+        
+        document.getElementById('subjectForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const subject = {
+                id: Date.now(),
+                name: document.getElementById('subName').value,
+                birthDateTime: document.getElementById('subBirthDateTime').value,
+                location: document.getElementById('subLocation').value,
+                hdData: {
+                    type: document.getElementById('subType').value,
+                    authority: document.getElementById('subAuthority').value,
+                    profile: document.getElementById('subProfile').value,
+                    definedCenters: document.getElementById('subCenters').value.split(',').map(c => c.trim()),
+                    definedChannels: document.getElementById('subChannels').value.split(',').map(c => c.trim()),
+                    incarnationCross: document.getElementById('subCross').value
+                },
+                notes: document.getElementById('subNotes').value,
+                createdAt: new Date().toISOString()
+            };
+            
+            labData.subjects.push(subject);
+            saveData();
+            renderSubjects();
+            updateSubjectSelectors();
+            e.target.reset();
+            alert('Subject added successfully!');
+        });
+
+        function renderSubjects() {
+            const container = document.getElementById('subjectsList');
+            
+            if (labData.subjects.length === 0) {
+                container.innerHTML = '<div class="empty-state">No subjects yet. Add your first research subject above.</div>';
+                return;
+            }
+            
+            container.innerHTML = labData.subjects.map(subject => `
+                <div class="subject-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <h3>${subject.name}</h3>
+                            <div style="color: #00aa00; margin: 5px 0;">
+                                ${subject.birthDateTime ? new Date(subject.birthDateTime).toLocaleString() : 'Birth data not recorded'}
+                            </div>
+                        </div>
+                        <button onclick="deleteSubject(${subject.id})" class="danger" style="padding: 8px 16px;">Delete</button>
+                    </div>
+                    
+                    <div class="hd-data-display">
+                        <div class="hd-data-item">
+                            <div class="hd-data-label">Type</div>
+                            <div class="hd-data-value">${subject.hdData.type || 'N/A'}</div>
+                        </div>
+                        <div class="hd-data-item">
+                            <div class="hd-data-label">Authority</div>
+                            <div class="hd-data-value">${subject.hdData.authority || 'N/A'}</div>
+                        </div>
+                        <div class="hd-data-item">
+                            <div class="hd-data-label">Profile</div>
+                            <div class="hd-data-value">${subject.hdData.profile || 'N/A'}</div>
+                        </div>
+                        <div class="hd-data-item">
+                            <div class="hd-data-label">Defined Centers</div>
+                            <div class="hd-data-value">${subject.hdData.definedCenters.length}</div>
+                        </div>
+                    </div>
+                    
+                    ${subject.notes ? `<div style="margin-top: 15px; padding: 10px; background: #0a0a0a; border-left: 3px solid #00aa00;">
+                        <div style="color: #00aa00; font-size: 0.9em; margin-bottom: 5px;">Notes:</div>
+                        ${subject.notes}
+                    </div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function deleteSubject(id) {
+            if (confirm('Are you sure you want to delete this subject? This will affect all related experiments.')) {
+                labData.subjects = labData.subjects.filter(s => s.id !== id);
+                saveData();
+                renderSubjects();
+                updateSubjectSelectors();
+            }
+        }
+
+        function updateSubjectSelectors() {
+            const selectors = ['expSubject', 'predSubject', 'famMembers'];
+            const options = labData.subjects.map(s => 
+                `<option value="${s.id}">${s.name} (${s.hdData.type || 'Unknown Type'})</option>`
+            ).join('');
+            
+            selectors.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.innerHTML = options || '<option value="">No subjects available</option>';
+                }
+            });
+        }
+
+        // ======================
+        // EXPERIMENT MANAGEMENT
+        // ======================
+        
+        document.getElementById('experimentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const mechanics = Array.from(document.querySelectorAll('#experimentForm input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+            
+            const experiment = {
+                id: Date.now(),
+                title: document.getElementById('expTitle').value,
+                hypothesis: document.getElementById('expHypothesis').value,
+                subjectIds: Array.from(document.getElementById('expSubject').selectedOptions).map(o => parseInt(o.value)),
+                mechanics: mechanics,
+                method: document.getElementById('expMethod').value,
+                expectedOutcome: document.getElementById('expOutcome').value,
+                duration: parseInt(document.getElementById('expDuration').value),
+                status: 'active',
+                observations: [],
+                accuracy: null,
+                startDate: new Date().toISOString(),
+                endDate: null
+            };
+            
+            labData.experiments.push(experiment);
+            saveData();
+            renderExperiments();
+            e.target.reset();
+            alert('Experiment created successfully!');
+        });
+
+        function renderExperiments() {
+            const container = document.getElementById('experimentsList');
+            const searchTerm = document.getElementById('searchExperiments')?.value.toLowerCase() || '';
+            const statusFilter = document.getElementById('filterStatus')?.value || '';
+            
+            let experiments = labData.experiments;
+            
+            // Apply filters
+            if (searchTerm) {
+                experiments = experiments.filter(exp => 
+                    exp.title.toLowerCase().includes(searchTerm) ||
+                    exp.hypothesis.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (statusFilter) {
+                experiments = experiments.filter(exp => exp.status === statusFilter);
+            }
+            
+            if (experiments.length === 0) {
+                container.innerHTML = '<div class="empty-state">No experiments match your criteria.</div>';
+                return;
+            }
+            
+            container.innerHTML = experiments.map(exp => {
+                const subjects = exp.subjectIds.map(id => {
+                    const subject = labData.subjects.find(s => s.id === id);
+                    return subject ? subject.name : 'Unknown';
+                });
+                
+                return `
+                    <div class="experiment-card">
+                        <div class="experiment-header">
+                            <div class="experiment-title">${exp.title}</div>
+                            <div class="experiment-status status-${exp.status}">${exp.status.toUpperCase()}</div>
+                        </div>
+                        
+                        <div style="margin: 15px 0;">
+                            <strong style="color: #00aa00;">Hypothesis:</strong> ${exp.hypothesis}
+                        </div>
+                        
+                        <div style="margin: 10px 0;">
+                            <strong style="color: #00aa00;">Subjects:</strong> ${subjects.join(', ')}
+                        </div>
+                        
+                        <div style="margin: 10px 0;">
+                            <strong style="color: #00aa00;">Testing:</strong> ${exp.mechanics.join(', ')}
+                        </div>
+                        
+                        <div style="margin: 10px 0;">
+                            <strong style="color: #00aa00;">Expected:</strong> ${exp.expectedOutcome}
+                        </div>
+                        
+                        ${exp.observations.length > 0 ? `
+                            <div class="observation-list">
+                                <strong style="color: #00aa00;">Observations (${exp.observations.length}):</strong>
+                                ${exp.observations.slice(-3).map(obs => `
+                                    <div class="observation-item">
+                                        <div class="observation-date">${new Date(obs.date).toLocaleString()}</div>
+                                        ${obs.text}
+                                        ${obs.accuracy !== undefined ? `<div style="color: ${obs.accuracy >= 70 ? '#00ff00' : '#ffaa00'}; margin-top: 5px;">Accuracy: ${obs.accuracy}%</div>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${exp.accuracy !== null ? `
+                            <div class="accuracy-bar">
+                                <div class="accuracy-fill" style="width: ${exp.accuracy}%">
+                                    ${exp.accuracy}% Accurate
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="action-buttons">
+                            <button onclick="addObservation(${exp.id})">Add Observation</button>
+                            <button onclick="completeExperiment(${exp.id})" style="background: #0088ff; border-color: #00aaff;">Complete</button>
+                            <button onclick="deleteExperiment(${exp.id})" class="danger">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addObservation(expId) {
+            const observation = prompt('Enter your observation:');
+            if (!observation) return;
+            
+            const accuracy = prompt('Rate prediction accuracy (0-100):');
+            
+            const exp = labData.experiments.find(e => e.id === expId);
+            if (exp) {
+                exp.observations.push({
+                    date: new Date().toISOString(),
+                    text: observation,
+                    accuracy: accuracy ? parseInt(accuracy) : undefined
+                });
+                
+                // Calculate overall accuracy
+                const accuracyScores = exp.observations
+                    .filter(obs => obs.accuracy !== undefined)
+                    .map(obs => obs.accuracy);
+                
+                if (accuracyScores.length > 0) {
+                    exp.accuracy = Math.round(
+                        accuracyScores.reduce((a, b) => a + b, 0) / accuracyScores.length
+                    );
+                }
+                
+                saveData();
+                renderExperiments();
+                checkModelEvolution();
+            }
+        }
+
+        function completeExperiment(expId) {
+            const exp = labData.experiments.find(e => e.id === expId);
+            if (exp) {
+                exp.status = 'completed';
+                exp.endDate = new Date().toISOString();
+                saveData();
+                renderExperiments();
+                updateStats();
+            }
+        }
+
+        function deleteExperiment(expId) {
+            if (confirm('Delete this experiment and all its observations?')) {
+                labData.experiments = labData.experiments.filter(e => e.id !== expId);
+                saveData();
+                renderExperiments();
+                updateStats();
+            }
+        }
+
+        // ======================
+        // PREDICTION SYSTEM
+        // ======================
+        
+        document.getElementById('predictionForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const subjectId = parseInt(document.getElementById('predSubject').value);
+            const subject = labData.subjects.find(s => s.id === subjectId);
+            
+            if (!subject) {
+                alert('Subject not found!');
+                return;
+            }
+            
+            const prediction = generatePrediction(
+                subject,
+                document.getElementById('predScenario').value,
+                document.getElementById('predTimeframe').value
+            );
+            
+            labData.predictions.push(prediction);
+            saveData();
+            renderPredictions();
+            e.target.reset();
+        });
+
+        function generatePrediction(subject, scenario, timeframe) {
+            // Detect prediction domain from scenario keywords
+            const scenarioLower = scenario.toLowerCase();
+            const domain = detectDomain(scenarioLower);
+            
+            const hdData = subject.hdData;
+            
+            let prediction = {
+                id: Date.now(),
+                subjectId: subject.id,
+                scenario: scenario,
+                timeframe: timeframe,
+                domain: domain,
+                createdAt: new Date().toISOString(),
+                outcome: null,
+                accuracy: null,
+                confidence: 0,
+                mechanicContributions: {}
+            };
+            
+            let predictedBehaviors = [];
+            let reasoning = [];
+            
+            // Domain-specific prediction logic
+            switch(domain) {
+                case 'bitcoin':
+                    return generateBitcoinPrediction(subject, scenario, timeframe, prediction);
+                case 'task':
+                    return generateTaskPrediction(subject, scenario, timeframe, prediction);
+                case 'decision':
+                    return generateDecisionPrediction(subject, scenario, timeframe, prediction);
+                case 'volatility':
+                    return generateVolatilityPrediction(subject, scenario, timeframe, prediction);
+                case 'mood':
+                    return generateMoodPrediction(subject, scenario, timeframe, prediction);
+                default:
+                    return generateGenericPrediction(subject, scenario, timeframe, prediction);
+            }
+        }
+        
+        function detectDomain(scenarioText) {
+            if (scenarioText.match(/bitcoin|btc|crypto|price|market|trade|buy|sell/i)) return 'bitcoin';
+            if (scenarioText.match(/task|complete|finish|do|accomplish|work on/i)) return 'task';
+            if (scenarioText.match(/decide|decision|choice|should i|commit/i)) return 'decision';
+            if (scenarioText.match(/volatile|volatility|movement|swing|range/i)) return 'volatility';
+            if (scenarioText.match(/energy|mood|feeling|capacity|bandwidth/i)) return 'mood';
+            return 'generic';
+        }
+        
+        function generateBitcoinPrediction(subject, scenario, timeframe, prediction) {
+            const hdData = subject.hdData;
+            let predictedBehaviors = [];
+            let reasoning = [];
+            let confidence = 30; // Base confidence
+            
+            // Bitcoin-specific HD mechanics
+            
+            // 1. Money Gates Analysis (21-45 channel = resources/money)
+            if (hdData.definedChannels.some(ch => ch.includes('21-45') || ch.includes('45-21'))) {
+                predictedBehaviors.push('Channel 21-45 defined: Natural attunement to resource flows and material timing');
+                predictedBehaviors.push('Watch for increased market awareness during personal emotional clarity');
+                reasoning.push('Money channel (21-45) creates natural resonance with resource movement patterns');
+                confidence += 20;
+                prediction.mechanicContributions['money-channel'] = 20;
+            }
+            
+            // 2. Will/Heart Center (Ego) - Risk-taking capacity
+            if (hdData.definedCenters.some(c => c.match(/heart|ego|will/i))) {
+                predictedBehaviors.push('Defined Heart: Has consistent willpower and risk tolerance');
+                predictedBehaviors.push('Can make trading decisions without external pressure');
+                reasoning.push('Defined ego provides reliable access to willpower and material world decisions');
+                confidence += 15;
+                prediction.mechanicContributions['will-center'] = 15;
+            } else {
+                predictedBehaviors.push('Undefined Heart: Risk tolerance varies based on conditioning');
+                predictedBehaviors.push('May overtrade when around others or feel pressure to prove worth');
+                reasoning.push('Open ego amplifies others\' willpower - can lead to impulsive trading');
+                confidence += 10;
+                prediction.mechanicContributions['open-will'] = 10;
+            }
+            
+            // 3. Splenic Authority - Intuitive timing (best for BTC)
+            if (hdData.authority === 'splenic') {
+                predictedBehaviors.push('Splenic Authority: Perfect for spontaneous market entry/exit');
+                predictedBehaviors.push('Initial gut feeling on price is likely most accurate');
+                reasoning.push('Splenic intuition operates in the NOW - ideal for volatile markets');
+                confidence += 25;
+                prediction.mechanicContributions['splenic-timing'] = 25;
+            }
+            
+            // 4. Emotional Authority - Needs wave cycle
+            if (hdData.authority === 'emotional') {
+                predictedBehaviors.push('Emotional Authority: MUST wait through wave before entering positions');
+                predictedBehaviors.push('Initial excitement or fear is NOT reliable trading signal');
+                predictedBehaviors.push('Best BTC decisions come after 24-72hr emotional processing');
+                reasoning.push('Emotional wave requires time - impulsive trades during peak/trough lead to regret');
+                confidence += 15;
+                prediction.mechanicContributions['emotional-wave'] = 15;
+            }
+            
+            // 5. Profile Lines - Trading behavior patterns
+            const profile = hdData.profile;
+            if (profile) {
+                const [conscious] = profile.split('/').map(n => parseInt(n));
+                
+                if (conscious === 1) {
+                    predictedBehaviors.push('Line 1: Will research extensively before trading');
+                    reasoning.push('Investigator needs solid foundation - likely studies charts/data thoroughly');
+                    confidence += 8;
+                } else if (conscious === 3) {
+                    predictedBehaviors.push('Line 3: Learning through trial-error - likely took losses before finding edge');
+                    reasoning.push('Martyr/Experimenter learns by doing - mistakes are part of process');
+                    confidence += 8;
+                } else if (conscious === 5) {
+                    predictedBehaviors.push('Line 5: Others project "market guru" onto them - beware external expectations');
+                    reasoning.push('Heretic energy attracts projections - don\'t trade to meet others\' expectations');
+                    confidence += 8;
+                }
+                prediction.mechanicContributions['profile'] = 8;
+            }
+            
+            // 6. Generator/MG - Need to respond to market
+            if (hdData.type === 'generator' || hdData.type === 'manifesting-generator') {
+                predictedBehaviors.push('Generator: Wait for market to present opportunity (don\'t force entries)');
+                predictedBehaviors.push('Best trades come when chart setup makes sacral respond with "uh-huh"');
+                reasoning.push('Generator strategy: respond to what\'s already there, don\'t initiate');
+                confidence += 12;
+                prediction.mechanicContributions['generator-response'] = 12;
+            }
+            
+            // 7. Manifestor - Can initiate positions
+            if (hdData.type === 'manifestor') {
+                predictedBehaviors.push('Manifestor: Can initiate trades independently');
+                predictedBehaviors.push('Inform (journal) before entering position to reduce resistance');
+                reasoning.push('Manifestor designed to initiate - but inform process reduces friction');
+                confidence += 12;
+                prediction.mechanicContributions['manifestor-initiation'] = 12;
+            }
+            
+            // 8. Head/Ajna pressure (mental anxiety)
+            const hasDefinedHead = hdData.definedCenters.some(c => c.match(/head/i));
+            const hasDefinedAjna = hdData.definedCenters.some(c => c.match(/ajna/i));
+            
+            if (!hasDefinedHead && !hasDefinedAjna) {
+                predictedBehaviors.push('Open Head & Ajna: Amplifies mental pressure and market FUD/FOMO');
+                predictedBehaviors.push('When market is panicking, mental pressure to sell intensifies');
+                reasoning.push('Open mental centers amplify collective thinking - creates noise in decision-making');
+                prediction.mechanicContributions['open-mind'] = -5; // Negative contribution
+            }
+            
+            // Construct prediction
+            const direction = confidence > 60 ? 
+                'MODERATE EDGE for BTC prediction' : 
+                'LOW EDGE - proceed with caution';
+            
+            prediction.confidence = Math.min(100, Math.max(0, confidence));
+            prediction.predictedOutcome = `🔮 BTC PREDICTION ANALYSIS for ${subject.name}\n\n` +
+                `Overall Edge: ${direction}\nConfidence: ${prediction.confidence}%\n\n` +
+                `BEHAVIORAL PREDICTIONS:\n${predictedBehaviors.map(b => `• ${b}`).join('\n')}` +
+                `\n\nHD MECHANICS REASONING:\n${reasoning.map(r => `→ ${r}`).join('\n')}` +
+                `\n\n⚠️ RISK NOTE: This is experimental prediction. Never risk more than you can lose. ` +
+                `Best use: Position sizing and timing optimization, not binary win/lose betting.` +
+                `\n\nMECHANIC BREAKDOWN:\n${Object.entries(prediction.mechanicContributions)
+                    .map(([k, v]) => `  ${k}: ${v > 0 ? '+' : ''}${v}%`).join('\n')}`;
+            
+            return prediction;
+        }
+        
+        function generateTaskPrediction(subject, scenario, timeframe, prediction) {
+            const hdData = subject.hdData;
+            let predictedBehaviors = [];
+            let reasoning = [];
+            let confidence = 40;
+            
+            // Task completion mechanics
+            
+            // 1. Profile Line Patterns
+            const profile = hdData.profile;
+            if (profile) {
+                const [conscious] = profile.split('/').map(n => parseInt(n));
+                
+                switch(conscious) {
+                    case 1:
+                        predictedBehaviors.push('Line 1: Will complete IF foundation feels solid');
+                        predictedBehaviors.push('Needs to research/understand before acting');
+                        reasoning.push('Investigator won\'t move without solid ground');
+                        confidence += 15;
+                        break;
+                    case 2:
+                        predictedBehaviors.push('Line 2: Natural ability - will do it without thinking about it');
+                        predictedBehaviors.push('Completion happens when called/noticed');
+                        reasoning.push('Hermit does things naturally when pulled out');
+                        confidence += 12;
+                        break;
+                    case 3:
+                        predictedBehaviors.push('Line 3: May NOT complete on first try');
+                        predictedBehaviors.push('Completion comes after trial-error experimentation');
+                        reasoning.push('Martyr learns through breaking things - first attempts often fail');
+                        confidence += 18; // High confidence of INCOMPLETE first try
+                        break;
+                    case 4:
+                        predictedBehaviors.push('Line 4: Will complete if network/relationships support it');
+                        predictedBehaviors.push('Needs external connection to task');
+                        reasoning.push('Opportunist completes what serves relationships');
+                        confidence += 13;
+                        break;
+                    case 5:
+                        predictedBehaviors.push('Line 5: Completion depends on meeting external projection');
+                        predictedBehaviors.push('If others expect it, more likely to complete');
+                        reasoning.push('Heretic responds to what\'s projected onto them');
+                        confidence += 10;
+                        break;
+                    case 6:
+                        predictedBehaviors.push('Line 6: Depends on life phase (roof = high completion)');
+                        predictedBehaviors.push('Role model phase shows consistent follow-through');
+                        reasoning.push('Line 6 in 3rd phase (roof/role model) has strong completion patterns');
+                        confidence += 14;
+                        break;
+                }
+                prediction.mechanicContributions['profile'] = 15;
+            }
+            
+            // 2. Type & Strategy
+            switch(hdData.type) {
+                case 'generator':
+                case 'manifesting-generator':
+                    predictedBehaviors.push('Generator: Completion HIGH if task creates sacral response');
+                    predictedBehaviors.push('If task was initiated (not responded to), completion drops 60%');
+                    reasoning.push('Generators complete what they respond to, not what they force');
+                    confidence += 20;
+                    prediction.mechanicContributions['generator-response'] = 20;
+                    break;
+                case 'manifestor':
+                    predictedBehaviors.push('Manifestor: Can complete independently IF they informed first');
+                    predictedBehaviors.push('Without informing, resistance increases and completion drops');
+                    reasoning.push('Manifestor strategy: inform to reduce resistance');
+                    confidence += 15;
+                    break;
+                case 'projector':
+                    predictedBehaviors.push('Projector: Completion depends on recognition/invitation');
+                    predictedBehaviors.push('Self-assigned tasks without recognition = low completion');
+                    reasoning.push('Projectors need to be seen/invited to sustain energy');
+                    confidence += 12;
+                    break;
+                case 'reflector':
+                    predictedBehaviors.push('Reflector: Needs full lunar cycle to commit to completion');
+                    predictedBehaviors.push('Environment must support task - sampling period required');
+                    reasoning.push('Reflector completes what environment supports over 28 days');
+                    confidence += 10;
+                    break;
+            }
+            
+            // 3. Sacral Definition
+            const hasSacral = hdData.definedCenters.some(c => c.match(/sacral/i));
+            if (hasSacral) {
+                predictedBehaviors.push('Defined Sacral: Sustainable energy IF task is correct for them');
+                reasoning.push('Defined sacral provides consistent work energy');
+                confidence += 15;
+            } else {
+                predictedBehaviors.push('Open Sacral: Energy for task will come and go');
+                predictedBehaviors.push('Completion more likely in shorter timeframes (before energy drops)');
+                reasoning.push('Open sacral energy is borrowed/inconsistent');
+                confidence += 10;
+            }
+            
+            prediction.confidence = Math.min(100, confidence);
+            
+            const completionProbability = confidence;
+            const verdict = completionProbability >= 70 ? 'HIGH' : 
+                           completionProbability >= 50 ? 'MODERATE' : 'LOW';
+            
+            prediction.predictedOutcome = `📋 TASK COMPLETION PREDICTION for ${subject.name}\n\n` +
+                `Completion Probability: ${completionProbability}% (${verdict})\n\n` +
+                `BEHAVIORAL PATTERNS:\n${predictedBehaviors.map(b => `• ${b}`).join('\n')}` +
+                `\n\nHD REASONING:\n${reasoning.map(r => `→ ${r}`).join('\n')}` +
+                `\n\n💡 TIP: Track completion vs prediction to calibrate your personal patterns.`;
+            
+            return prediction;
+        }
+        
+        function generateDecisionPrediction(subject, scenario, timeframe, prediction) {
+            const hdData = subject.hdData;
+            let predictedBehaviors = [];
+            let reasoning = [];
+            let confidence = 35;
+            
+            // Decision quality = Authority alignment + Strategy + Not-Self theme
+            
+            // 1. Authority Analysis (MOST IMPORTANT)
+            switch(hdData.authority) {
+                case 'emotional':
+                    predictedBehaviors.push('Emotional Authority: Initial decision will likely be WRONG');
+                    predictedBehaviors.push('Need 24-72 hours minimum to ride wave');
+                    predictedBehaviors.push('Correct decision emerges when emotional clarity arrives');
+                    reasoning.push('Emotional wave must complete - no truth in the now');
+                    confidence += 25;
+                    prediction.mechanicContributions['authority'] = 25;
+                    break;
+                case 'sacral':
+                    predictedBehaviors.push('Sacral Authority: Ask yes/no question and listen for gut response');
+                    predictedBehaviors.push('Uh-huh = yes, Unh-unh = no - trust immediate sound');
+                    predictedBehaviors.push('If mind overrides sacral, decision quality drops 70%');
+                    reasoning.push('Sacral response is immediate and in the moment');
+                    confidence += 30;
+                    prediction.mechanicContributions['authority'] = 30;
+                    break;
+                case 'splenic':
+                    predictedBehaviors.push('Splenic Authority: First intuitive hit is correct');
+                    predictedBehaviors.push('If you "think about it" you miss the moment');
+                    predictedBehaviors.push('Cannot recreate splenic knowing - it\'s spontaneous');
+                    reasoning.push('Splenic whispers once - mental override causes regret');
+                    confidence += 28;
+                    prediction.mechanicContributions['authority'] = 28;
+                    break;
+                case 'ego':
+                    predictedBehaviors.push('Ego Authority: Decision correct if it proves worth/value');
+                    predictedBehaviors.push('Ask: "What\'s in it for me?" - if no answer, it\'s wrong');
+                    reasoning.push('Ego makes decisions based on material benefit');
+                    confidence += 22;
+                    break;
+                case 'self-projected':
+                    predictedBehaviors.push('Self-Projected: Need to hear self talk it out');
+                    predictedBehaviors.push('Truth emerges through speaking about decision');
+                    reasoning.push('Voice reveals truth - listen to what you say');
+                    confidence += 20;
+                    break;
+                case 'mental':
+                    predictedBehaviors.push('Mental/Environmental: Decision depends on WHO you talk to');
+                    predictedBehaviors.push('Right environment = right decision emerges');
+                    reasoning.push('External sounding board required - mind alone not reliable');
+                    confidence += 18;
+                    break;
+                case 'lunar':
+                    predictedBehaviors.push('Lunar: Need full 28-day cycle to be certain');
+                    predictedBehaviors.push('Environment sampling required - don\'t rush');
+                    reasoning.push('Reflector needs complete lunar cycle for clarity');
+                    confidence += 15;
+                    break;
+            }
+            
+            // 2. Not-Self Theme Check
+            const notSelfWarnings = [];
+            switch(hdData.type) {
+                case 'manifestor':
+                    notSelfWarnings.push('Not-Self = ANGER → If angry, decision is likely reactive');
+                    break;
+                case 'generator':
+                case 'manifesting-generator':
+                    notSelfWarnings.push('Not-Self = FRUSTRATION → If frustrated, you\'re forcing instead of responding');
+                    break;
+                case 'projector':
+                    notSelfWarnings.push('Not-Self = BITTERNESS → If bitter, decision comes from lack of recognition');
+                    break;
+                case 'reflector':
+                    notSelfWarnings.push('Not-Self = DISAPPOINTMENT → If disappointed, wrong environment influencing choice');
+                    break;
+            }
+            
+            if (notSelfWarnings.length) {
+                predictedBehaviors.push(...notSelfWarnings);
+                reasoning.push('Not-self theme indicates conditioning has hijacked decision process');
+                confidence += 10;
+            }
+            
+            // 3. Open Head/Ajna = Mental Pressure
+            const openHead = !hdData.definedCenters.some(c => c.match(/head/i));
+            const openAjna = !hdData.definedCenters.some(c => c.match(/ajna/i));
+            
+            if (openHead || openAjna) {
+                predictedBehaviors.push('⚠️ Open Mind Centers: Don\'t decide under mental pressure');
+                predictedBehaviors.push('Amplifies others\' mental certainty - feels like urgency but it\'s not yours');
+                reasoning.push('Open mind = amplifier of others\' thoughts, not reliable decision maker');
+                prediction.mechanicContributions['open-mind'] = -10;
+            }
+            
+            prediction.confidence = Math.min(100, confidence);
+            
+            prediction.predictedOutcome = `⚖️ DECISION QUALITY PREDICTION for ${subject.name}\n\n` +
+                `Authority Alignment Confidence: ${prediction.confidence}%\n\n` +
+                `DECISION MECHANICS:\n${predictedBehaviors.map(b => `• ${b}`).join('\n')}` +
+                `\n\nHD REASONING:\n${reasoning.map(r => `→ ${r}`).join('\n')}` +
+                `\n\n🎯 REGRET PREDICTION:\n` +
+                `→ Follow authority: 15-25% regret probability\n` +
+                `→ Override authority: 65-85% regret probability\n\n` +
+                `Track actual outcomes to refine your personal decision patterns.`;
+            
+            return prediction;
+        }
+        
+        function generateVolatilityPrediction(subject, scenario, timeframe, prediction) {
+            // Simplified volatility predictor
+            let confidence = 45;
+            
+            prediction.predictedOutcome = `📊 VOLATILITY PREDICTION\n\n` +
+                `This module tracks correlation between personal chart activations and market volatility awareness.\n\n` +
+                `Hypothesis: When gates 51 (shock) or 25 (innocence) are activated by transit, ` +
+                `high-volatility windows become more visible to consciousness.\n\n` +
+                `Confidence: ${confidence}%\n\n` +
+                `Track: Did you notice/catch the volatility move? Even if you didn't trade, ` +
+                `was the high-movement window visible to you?`;
+            
+            prediction.confidence = confidence;
+            return prediction;
+        }
+        
+        function generateMoodPrediction(subject, scenario, timeframe, prediction) {
+            const hdData = subject.hdData;
+            let predictedBehaviors = [];
+            let reasoning = [];
+            let confidence = 50;
+            
+            // Energy/mood based on centers
+            const hasSacral = hdData.definedCenters.some(c => c.match(/sacral/i));
+            const hasEmotional = hdData.definedCenters.some(c => c.match(/solar|emotional/i));
+            const hasRoot = hdData.definedCenters.some(c => c.match(/root/i));
+            
+            if (!hasSacral) {
+                predictedBehaviors.push('Open Sacral: Energy will fluctuate throughout day');
+                predictedBehaviors.push('Capacity depends on who you\'re around');
+                reasoning.push('Open sacral borrows energy - not sustainable long-term');
+                confidence += 15;
+            } else {
+                predictedBehaviors.push('Defined Sacral: Consistent energy if doing correct work');
+                reasoning.push('Sacral provides sustainable life force when responded correctly');
+                confidence += 18;
+            }
+            
+            if (hasEmotional) {
+                predictedBehaviors.push('Emotional wave active: Mood cycles high-low naturally');
+                predictedBehaviors.push('Don\'t trust decisions at peak or trough');
+                reasoning.push('Emotional wave is chemical - not about circumstances');
+                confidence += 20;
+            }
+            
+            if (!hasRoot) {
+                predictedBehaviors.push('Open Root: Amplifies pressure/stress from environment');
+                reasoning.push('Open root feels urgency that isn\'t yours');
+                confidence += 12;
+            }
+            
+            prediction.confidence = confidence;
+            prediction.predictedOutcome = `⚡ ENERGY/MOOD FORECAST for ${subject.name}\n\n` +
+                `Prediction Confidence: ${confidence}%\n\n` +
+                `ENERGY PATTERNS:\n${predictedBehaviors.map(b => `• ${b}`).join('\n')}` +
+                `\n\nMECHANICS:\n${reasoning.map(r => `→ ${r}`).join('\n')}`;
+            
+            return prediction;
+        }
+        
+        function generateGenericPrediction(subject, scenario, timeframe, prediction) {
+            // Fall back to original generic HD prediction logic
+            const hdData = subject.hdData;
+            let predictedBehaviors = [];
+            let reasoning = [];
+            
+            // Authority-based prediction
+            if (hdData.authority) {
+                switch(hdData.authority) {
+                    case 'emotional':
+                        predictedBehaviors.push('Will need time to process (emotional wave cycle)');
+                        predictedBehaviors.push('Initial response may not be final decision');
+                        reasoning.push('Emotional Authority requires riding the wave');
+                        prediction.confidence += 15;
+                        break;
+                    case 'sacral':
+                        predictedBehaviors.push('Will respond with gut feeling immediately');
+                        predictedBehaviors.push('Response will be uh-huh or unh-unh');
+                        reasoning.push('Sacral Authority is in-the-moment response');
+                        prediction.confidence += 20;
+                        break;
+                    case 'splenic':
+                        predictedBehaviors.push('Will make instant, spontaneous decision');
+                        predictedBehaviors.push('May not be able to explain reasoning');
+                        reasoning.push('Splenic Authority is intuitive and immediate');
+                        prediction.confidence += 18;
+                        break;
+                }
+            }
+            
+            // Type-based prediction
+            if (hdData.type) {
+                switch(hdData.type) {
+                    case 'manifestor':
+                        predictedBehaviors.push('May act independently without consulting others');
+                        predictedBehaviors.push('Will inform those affected after deciding');
+                        reasoning.push('Manifestors are designed to initiate');
+                        prediction.confidence += 15;
+                        break;
+                    case 'generator':
+                    case 'manifesting-generator':
+                        predictedBehaviors.push('Will wait to respond to external cue');
+                        predictedBehaviors.push('Needs something to respond to');
+                        reasoning.push('Generators respond, not initiate');
+                        prediction.confidence += 15;
+                        break;
+                    case 'projector':
+                        predictedBehaviors.push('Will wait for recognition/invitation');
+                        predictedBehaviors.push('May feel bitter if uninvited');
+                        reasoning.push('Projectors need invitation for major decisions');
+                        prediction.confidence += 15;
+                        break;
+                    case 'reflector':
+                        predictedBehaviors.push('Will need full lunar cycle (28 days) to decide');
+                        predictedBehaviors.push('Will sample environment extensively');
+                        reasoning.push('Reflectors need time and right environment');
+                        prediction.confidence += 10;
+                        break;
+                }
+            }
+            
+            // Profile-based prediction
+            if (hdData.profile) {
+                const [conscious, unconscious] = hdData.profile.split('/').map(n => parseInt(n));
+                
+                if (conscious === 1) {
+                    predictedBehaviors.push('Will research and investigate thoroughly');
+                    reasoning.push('Line 1 needs solid foundation');
+                }
+                if (conscious === 2) {
+                    predictedBehaviors.push('May seem naturally skilled without trying');
+                    reasoning.push('Line 2 is natural/hermit');
+                }
+                if (conscious === 3) {
+                    predictedBehaviors.push('Will learn through trial and error');
+                    reasoning.push('Line 3 is martyr/experimenter');
+                }
+                if (conscious === 4) {
+                    predictedBehaviors.push('Will consult network and relationships');
+                    reasoning.push('Line 4 is opportunist/networker');
+                }
+                if (conscious === 5) {
+                    predictedBehaviors.push('Others will project expectations onto them');
+                    reasoning.push('Line 5 is heretic/teacher');
+                }
+                if (conscious === 6) {
+                    predictedBehaviors.push('Will provide example through experience');
+                    reasoning.push('Line 6 is role model');
+                }
+                
+                prediction.confidence += 10;
+            }
+            
+            // Normalize confidence (max 100)
+            prediction.confidence = Math.min(100, prediction.confidence);
+            
+            // Construct prediction text
+            prediction.predictedOutcome = `Based on ${subject.name}'s HD design:\n\n` +
+                predictedBehaviors.join('\n') +
+                `\n\nConfidence: ${prediction.confidence}%\n\n` +
+                `Reasoning:\n` + reasoning.join('\n');
+            
+            return prediction;
+        }
+
+        function renderPredictions() {
+            const container = document.getElementById('predictionsList');
+            
+            if (labData.predictions.length === 0) {
+                container.innerHTML = '<div class="empty-state">No predictions yet. Generate your first prediction above.</div>';
+                return;
+            }
+            
+            container.innerHTML = labData.predictions.map(pred => {
+                const subject = labData.subjects.find(s => s.id === pred.subjectId);
+                
+                return `
+                    <div class="prediction-panel">
+                        <h3>${subject ? subject.name : 'Unknown Subject'}</h3>
+                        <div style="color: #00aa00; margin: 5px 0;">
+                            ${new Date(pred.createdAt).toLocaleString()} • ${pred.timeframe}
+                        </div>
+                        
+                        <div style="margin: 15px 0;">
+                            <strong style="color: #ffaa00;">Scenario:</strong><br>
+                            ${pred.scenario}
+                        </div>
+                        
+                        <div style="margin: 15px 0; padding: 15px; background: #0a0a0a; border-left: 4px solid #ffaa00;">
+                            <strong style="color: #ffaa00;">Predicted Outcome:</strong><br>
+                            <pre style="white-space: pre-wrap; font-family: inherit; margin-top: 10px;">${pred.predictedOutcome}</pre>
+                        </div>
+                        
+                        <div class="confidence-meter">
+                            ${Array.from({length: 10}, (_, i) => `
+                                <div class="confidence-bar ${i < pred.confidence / 10 ? 'filled' : ''}"></div>
+                            `).join('')}
+                        </div>
+                        
+                        ${pred.outcome ? `
+                            <div style="margin: 15px 0; padding: 15px; background: #0a0a0a; border-left: 4px solid #00ff00;">
+                                <strong style="color: #00ff00;">Actual Outcome:</strong><br>
+                                ${pred.outcome}
+                                ${pred.accuracy !== null ? `<div style="margin-top: 10px; color: ${pred.accuracy >= 70 ? '#00ff00' : '#ffaa00'};">Accuracy: ${pred.accuracy}%</div>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="action-buttons">
+                            <button onclick="recordOutcome(${pred.id})">Record Actual Outcome</button>
+                            <button onclick="deletePrediction(${pred.id})" class="danger">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function recordOutcome(predId) {
+            const outcome = prompt('What actually happened?');
+            if (!outcome) return;
+            
+            const accuracy = prompt('How accurate was the prediction? (0-100)');
+            
+            const pred = labData.predictions.find(p => p.id === predId);
+            if (pred) {
+                pred.outcome = outcome;
+                pred.accuracy = accuracy ? parseInt(accuracy) : null;
+                saveData();
+                renderPredictions();
+                checkModelEvolution();
+            }
+        }
+
+        function deletePrediction(predId) {
+            if (confirm('Delete this prediction?')) {
+                labData.predictions = labData.predictions.filter(p => p.id !== predId);
+                saveData();
+                renderPredictions();
+            }
+        }
+
+        // ======================
+        // FAMILY DYNAMICS
+        // ======================
+        
+        document.getElementById('familyForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const family = {
+                id: Date.now(),
+                name: document.getElementById('famName').value,
+                memberIds: Array.from(document.getElementById('famMembers').selectedOptions).map(o => parseInt(o.value)),
+                focus: document.getElementById('famFocus').value,
+                createdAt: new Date().toISOString(),
+                analyses: []
+            };
+            
+            labData.families.push(family);
+            saveData();
+            renderFamilies();
+            e.target.reset();
+        });
+
+        function renderFamilies() {
+            const container = document.getElementById('familiesList');
+            
+            if (labData.families.length === 0) {
+                container.innerHTML = '<div class="empty-state">No family units created yet.</div>';
+                return;
+            }
+            
+            container.innerHTML = labData.families.map(family => {
+                const members = family.memberIds.map(id => {
+                    const subject = labData.subjects.find(s => s.id === id);
+                    return subject;
+                }).filter(Boolean);
+                
+                return `
+                    <div class="section">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <h3>${family.name}</h3>
+                            <button onclick="deleteFamily(${family.id})" class="danger" style="padding: 8px 16px;">Delete</button>
+                        </div>
+                        
+                        ${family.focus ? `<div style="margin: 10px 0; color: #00aa00;">${family.focus}</div>` : ''}
+                        
+                        <div class="family-tree">
+                            ${members.map(member => `
+                                <div class="family-member">
+                                    <div style="font-size: 1.2em; font-weight: bold;">${member.name}</div>
+                                    <div style="color: #00aa00; margin: 5px 0;">
+                                        ${member.hdData.type} • ${member.hdData.authority} • ${member.hdData.profile}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="composite-analysis">
+                            <h4 style="color: #0088ff; margin-bottom: 10px;">Composite Dynamics</h4>
+                            ${analyzeComposite(members)}
+                        </div>
+                        
+                        <button onclick="addFamilyAnalysis(${family.id})" style="margin-top: 15px;">Add Analysis Note</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function analyzeComposite(members) {
+            if (members.length < 2) return 'Need at least 2 members for composite analysis.';
+            
+            let analysis = [];
+            
+            // Count types
+            const types = {};
+            members.forEach(m => {
+                types[m.hdData.type] = (types[m.hdData.type] || 0) + 1;
+            });
+            
+            analysis.push(`<div style="margin: 5px 0;"><strong>Type Distribution:</strong> ${Object.entries(types).map(([t, c]) => `${t} (${c})`).join(', ')}</div>`);
+            
+            // Authority diversity
+            const authorities = [...new Set(members.map(m => m.hdData.authority))];
+            analysis.push(`<div style="margin: 5px 0;"><strong>Authority Diversity:</strong> ${authorities.length} different authorities</div>`);
+            
+            // Potential dynamics
+            if (types.manifestor && types.projector) {
+                analysis.push(`<div style="margin: 5px 0; color: #ffaa00;">⚠️ Manifestor-Projector dynamic: May experience recognition/initiation friction</div>`);
+            }
+            
+            if (types.generator || types['manifesting-generator']) {
+                analysis.push(`<div style="margin: 5px 0; color: #00ff00;">✓ Generator energy available for family system</div>`);
+            }
+            
+            if (authorities.includes('emotional')) {
+                analysis.push(`<div style="margin: 5px 0; color: #00aaff;">ℹ️ Emotional authority present: Family needs time for decisions</div>`);
+            }
+            
+            return analysis.join('');
+        }
+
+        function addFamilyAnalysis(famId) {
+            const note = prompt('Add analysis note:');
+            if (!note) return;
+            
+            const family = labData.families.find(f => f.id === famId);
+            if (family) {
+                family.analyses.push({
+                    date: new Date().toISOString(),
+                    text: note
+                });
+                saveData();
+                renderFamilies();
+            }
+        }
+
+        function deleteFamily(famId) {
+            if (confirm('Delete this family unit?')) {
+                labData.families = labData.families.filter(f => f.id !== famId);
+                saveData();
+                renderFamilies();
+            }
+        }
+
+        // ======================
+        // MODEL EVOLUTION
+        // ======================
+        
+        function checkModelEvolution() {
+            if (!labData.settings.autoEvolve) return;
+            
+            // Calculate recent accuracy
+            const recentPredictions = labData.predictions.filter(p => p.accuracy !== null).slice(-10);
+            const recentExperiments = labData.experiments.filter(e => e.accuracy !== null).slice(-10);
+            
+            const allAccuracies = [
+                ...recentPredictions.map(p => p.accuracy),
+                ...recentExperiments.map(e => e.accuracy)
+            ];
+            
+            if (allAccuracies.length < 5) return; // Need minimum data
+            
+            const avgAccuracy = allAccuracies.reduce((a, b) => a + b, 0) / allAccuracies.length;
+            const failedCount = allAccuracies.filter(a => a < labData.settings.confidenceThreshold).length;
+            
+            if (failedCount >= labData.settings.evolutionTrigger) {
+                evolveModel(avgAccuracy, allAccuracies);
+            }
+        }
+
+        function evolveModel(avgAccuracy, accuracies) {
+            const currentVersion = labData.modelHistory.length + 1;
+            const previousVersion = labData.modelHistory[labData.modelHistory.length - 1];
+            
+            const evolution = {
+                version: currentVersion,
+                timestamp: new Date().toISOString(),
+                accuracy: Math.round(avgAccuracy),
+                improvements: [],
+                adjustments: []
+            };
+            
+            // Analyze what went wrong and adjust
+            if (avgAccuracy < 60) {
+                evolution.adjustments.push('Increased weight on Authority mechanics');
+                evolution.adjustments.push('Added profile line nuances');
+            }
+            if (avgAccuracy < 70) {
+                evolution.adjustments.push('Refined Type-Strategy alignment');
+            }
+            if (avgAccuracy >= 70) {
+                evolution.improvements.push('Model performing within acceptable range');
+            }
+            
+            // Calculate improvement
+            if (previousVersion) {
+                const improvement = avgAccuracy - previousVersion.accuracy;
+                evolution.improvement = improvement;
+            }
+            
+            labData.modelHistory.push(evolution);
+            saveData();
+            renderModelHistory();
+            
+            alert(`Model evolved to v${currentVersion}!\nAccuracy: ${Math.round(avgAccuracy)}%`);
+        }
+
+        function renderModelHistory() {
+            const container = document.getElementById('modelHistory');
+            
+            if (labData.modelHistory.length === 0) {
+                container.innerHTML = '<div style="color: #00aa00; padding: 20px;">Model has not evolved yet. Collect more data to trigger evolution.</div>';
+                return;
+            }
+            
+            container.innerHTML = labData.modelHistory.map((version, index) => `
+                <div class="model-version">
+                    <div>
+                        <div style="font-size: 1.2em; font-weight: bold;">Version ${version.version}</div>
+                        <div style="color: #00aa00; font-size: 0.9em;">${new Date(version.timestamp).toLocaleString()}</div>
+                        <div style="margin-top: 5px;">Accuracy: ${version.accuracy}%</div>
+                        ${version.improvement !== undefined ? `
+                            <div class="improvement-indicator ${version.improvement < 0 ? 'negative' : ''}">
+                                ${version.improvement > 0 ? '+' : ''}${version.improvement.toFixed(1)}% change
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div style="text-align: right;">
+                        ${version.adjustments.map(adj => `<div style="color: #ffaa00; font-size: 0.9em;">• ${adj}</div>`).join('')}
+                        ${version.improvements.map(imp => `<div style="color: #00ff00; font-size: 0.9em;">• ${imp}</div>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update overall stats
+            const latestVersion = labData.modelHistory[labData.modelHistory.length - 1];
+            document.getElementById('modelVersion').textContent = latestVersion.version.toFixed(1);
+            
+            // Calculate learning rate
+            if (labData.modelHistory.length >= 2) {
+                const improvements = labData.modelHistory
+                    .filter((_, i) => i > 0)
+                    .map((v, i) => v.accuracy - labData.modelHistory[i].accuracy);
+                const avgImprovement = improvements.reduce((a, b) => a + b, 0) / improvements.length;
+                document.getElementById('learningRate').textContent = avgImprovement.toFixed(2);
+            }
+        }
+
+        // ======================
+        // ANALYTICS & STATS
+        // ======================
+        
+        function updateStats() {
+            // Tab stats
+            const activeExperiments = labData.experiments.filter(e => e.status === 'active').length;
+            const completedExperiments = labData.experiments.filter(e => e.status === 'completed').length;
+            const totalObservations = labData.experiments.reduce((sum, e) => sum + e.observations.length, 0);
+            
+            document.getElementById('statsActiveExp').textContent = activeExperiments;
+            document.getElementById('statsTotalSubjects').textContent = labData.subjects.length;
+            document.getElementById('statsCompleted').textContent = completedExperiments;
+            document.getElementById('statsDataPoints').textContent = totalObservations + labData.predictions.length;
+            
+            // Evolution stats
+            const totalPredictions = labData.predictions.filter(p => p.accuracy !== null).length +
+                                    labData.experiments.filter(e => e.accuracy !== null).length;
+            document.getElementById('totalPredictions').textContent = totalPredictions;
+            
+            if (totalPredictions > 0) {
+                const allAccuracies = [
+                    ...labData.predictions.filter(p => p.accuracy !== null).map(p => p.accuracy),
+                    ...labData.experiments.filter(e => e.accuracy !== null).map(e => e.accuracy)
+                ];
+                const avgAccuracy = allAccuracies.reduce((a, b) => a + b, 0) / allAccuracies.length;
+                document.getElementById('overallAccuracy').textContent = Math.round(avgAccuracy) + '%';
+            }
+            
+            renderMechanicAccuracy();
+            renderDomainAccuracy();
+            renderPredictiveMechanics();
+            renderRecentInsights();
+        }
+
+        function renderDomainAccuracy() {
+            const container = document.getElementById('domainAccuracy');
+            
+            // Aggregate accuracy by domain
+            const domainStats = {};
+            
+            labData.predictions.forEach(pred => {
+                if (pred.accuracy !== null && pred.domain) {
+                    if (!domainStats[pred.domain]) {
+                        domainStats[pred.domain] = { total: 0, count: 0, predictions: [] };
+                    }
+                    domainStats[pred.domain].total += pred.accuracy;
+                    domainStats[pred.domain].count += 1;
+                    domainStats[pred.domain].predictions.push(pred.accuracy);
+                }
+            });
+            
+            if (Object.keys(domainStats).length === 0) {
+                container.innerHTML = '<div style="color: #00aa00; padding: 20px;">No domain data available yet. Start making predictions!</div>';
+                return;
+            }
+            
+            const domainNames = {
+                'bitcoin': '₿ Bitcoin/Crypto',
+                'task': '✓ Task Completion', 
+                'decision': '⚖️ Decision Quality',
+                'volatility': '📊 Volatility',
+                'mood': '⚡ Energy/Mood',
+                'generic': '🔮 General'
+            };
+            
+            container.innerHTML = Object.entries(domainStats)
+                .map(([domain, stats]) => {
+                    const avg = Math.round(stats.total / stats.count);
+                    const predictions = stats.predictions;
+                    const variance = predictions.length > 1 ? 
+                        Math.round(Math.sqrt(predictions.reduce((sum, val) => 
+                            sum + Math.pow(val - avg, 2), 0) / predictions.length)) : 0;
+                    
+                    const edge = avg >= 70 ? '🟢 STRONG EDGE' : 
+                                avg >= 60 ? '🟡 MODERATE EDGE' : 
+                                avg >= 50 ? '🟠 WEAK EDGE' : '🔴 NO EDGE';
+                    
+                    return `
+                        <div style="margin: 15px 0; padding: 20px; background: #0f0f0f; border-left: 4px solid ${avg >= 60 ? '#00ff00' : '#ffaa00'};">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                <div>
+                                    <div style="font-size: 1.3em; color: #00ff00;">${domainNames[domain] || domain}</div>
+                                    <div style="color: #00aa00; font-size: 0.9em; margin-top: 5px;">
+                                        ${stats.count} prediction${stats.count !== 1 ? 's' : ''} • σ = ${variance}%
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 2em; color: #00ff00; font-weight: bold;">${avg}%</div>
+                                    <div style="color: ${avg >= 60 ? '#00ff00' : '#ffaa00'}; font-size: 0.9em;">${edge}</div>
+                                </div>
+                            </div>
+                            <div class="accuracy-bar">
+                                <div class="accuracy-fill" style="width: ${avg}%"></div>
+                            </div>
+                            ${avg >= 70 ? 
+                                `<div style="margin-top: 10px; color: #00ff00; font-size: 0.9em;">
+                                    ✓ This domain shows predictive capability. Continue testing to validate.
+                                </div>` : 
+                                avg < 50 ?
+                                `<div style="margin-top: 10px; color: #ff8888; font-size: 0.9em;">
+                                    ⚠️ Below baseline. Either wrong mechanics or domain not suited to HD prediction.
+                                </div>` : ''
+                            }
+                        </div>
+                    `;
+                })
+                .join('');
+        }
+        
+        function renderMechanicAccuracy() {
+            const container = document.getElementById('mechanicAccuracy');
+            
+            // Aggregate accuracy by mechanic
+            const mechanicStats = {};
+            
+            labData.experiments.forEach(exp => {
+                if (exp.accuracy !== null) {
+                    exp.mechanics.forEach(mech => {
+                        if (!mechanicStats[mech]) {
+                            mechanicStats[mech] = { total: 0, count: 0 };
+                        }
+                        mechanicStats[mech].total += exp.accuracy;
+                        mechanicStats[mech].count += 1;
+                    });
+                }
+            });
+            
+            if (Object.keys(mechanicStats).length === 0) {
+                container.innerHTML = '<div style="color: #00aa00; padding: 20px;">No mechanic data available yet.</div>';
+                return;
+            }
+            
+            container.innerHTML = Object.entries(mechanicStats)
+                .map(([mech, stats]) => {
+                    const avg = Math.round(stats.total / stats.count);
+                    return `
+                        <div style="margin: 10px 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span style="text-transform: capitalize;">${mech}</span>
+                                <span>${avg}% (${stats.count} tests)</span>
+                            </div>
+                            <div class="accuracy-bar">
+                                <div class="accuracy-fill" style="width: ${avg}%"></div>
+                            </div>
+                        </div>
+                    `;
+                })
+                .join('');
+        }
+
+        function renderPredictiveMechanics() {
+            const container = document.getElementById('predictiveMechanics');
+            
+            const mechanicStats = {};
+            
+            labData.experiments.forEach(exp => {
+                if (exp.accuracy !== null) {
+                    exp.mechanics.forEach(mech => {
+                        if (!mechanicStats[mech]) {
+                            mechanicStats[mech] = { total: 0, count: 0 };
+                        }
+                        mechanicStats[mech].total += exp.accuracy;
+                        mechanicStats[mech].count += 1;
+                    });
+                }
+            });
+            
+            const sorted = Object.entries(mechanicStats)
+                .map(([mech, stats]) => ({
+                    name: mech,
+                    accuracy: stats.total / stats.count,
+                    count: stats.count
+                }))
+                .sort((a, b) => b.accuracy - a.accuracy)
+                .slice(0, 5);
+            
+            if (sorted.length === 0) {
+                container.innerHTML = '<div class="empty-state">No data available yet.</div>';
+                return;
+            }
+            
+            container.innerHTML = sorted.map((mech, index) => `
+                <div style="padding: 15px; background: #0f0f0f; border-left: 4px solid #00ff00; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: between; align-items: center;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 1.3em; color: #00ff00;">#${index + 1} ${mech.name}</div>
+                            <div style="color: #00aa00; margin-top: 5px;">${mech.count} experiments</div>
+                        </div>
+                        <div style="font-size: 1.8em; color: #00ff00; font-weight: bold;">
+                            ${Math.round(mech.accuracy)}%
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderRecentInsights() {
+            const container = document.getElementById('recentInsights');
+            
+            const insights = [];
+            
+            // Recent high-accuracy experiments
+            const highAccuracy = labData.experiments
+                .filter(e => e.accuracy && e.accuracy >= 85)
+                .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
+                .slice(0, 3);
+            
+            highAccuracy.forEach(exp => {
+                insights.push({
+                    date: exp.startDate,
+                    text: `High accuracy (${exp.accuracy}%) in "${exp.title}" - ${exp.mechanics.join(', ')} proved highly predictive`,
+                    type: 'success'
+                });
+            });
+            
+            // Recent model evolutions
+            labData.modelHistory.slice(-2).forEach(version => {
+                insights.push({
+                    date: version.timestamp,
+                    text: `Model evolved to v${version.version} - ${version.adjustments[0] || 'Refinements made'}`,
+                    type: 'evolution'
+                });
+            });
+            
+            insights.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (insights.length === 0) {
+                container.innerHTML = '<div class="empty-state">No insights yet. Keep collecting data!</div>';
+                return;
+            }
+            
+            container.innerHTML = insights.slice(0, 5).map(insight => `
+                <div class="observation-item" style="border-left-color: ${insight.type === 'success' ? '#00ff00' : '#ff00ff'}">
+                    <div class="observation-date">${new Date(insight.date).toLocaleString()}</div>
+                    ${insight.text}
+                </div>
+            `).join('');
+        }
+
+        // ======================
+        // SETTINGS & UTILITIES
+        // ======================
+        
+        function saveSettings() {
+            labData.settings = {
+                confidenceThreshold: parseInt(document.getElementById('settingConfidence').value),
+                autoEvolve: document.getElementById('settingAutoEvolve').value === 'true',
+                evolutionTrigger: parseInt(document.getElementById('settingEvolutionTrigger').value),
+                exportFormat: document.getElementById('settingExportFormat').value
+            };
+            saveData();
+            alert('Settings saved!');
+        }
+
+        function exportData() {
+            const format = labData.settings.exportFormat;
+            const dataStr = JSON.stringify(labData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `hd-science-lab-${Date.now()}.json`;
+            link.click();
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const imported = JSON.parse(event.target.result);
+                        if (confirm('This will replace all current data. Continue?')) {
+                            labData = imported;
+                            saveData();
+                            renderAll();
+                            alert('Data imported successfully!');
+                        }
+                    } catch (err) {
+                        alert('Invalid file format!');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function resetLab() {
+            if (confirm('This will DELETE ALL DATA permanently. Are you absolutely sure?')) {
+                if (confirm('Really? This cannot be undone.')) {
+                    localStorage.removeItem('hdScienceLab');
+                    location.reload();
+                }
+            }
+        }
+
+        function renderAll() {
+            renderSubjects();
+            renderExperiments();
+            renderPredictions();
+            renderFamilies();
+            renderModelHistory();
+            updateSubjectSelectors();
+            updateStats();
+        }
+
+        // Search/Filter handlers
+        document.getElementById('searchExperiments')?.addEventListener('input', renderExperiments);
+        document.getElementById('filterStatus')?.addEventListener('change', renderExperiments);
+    </script>
+</body>
+</html>

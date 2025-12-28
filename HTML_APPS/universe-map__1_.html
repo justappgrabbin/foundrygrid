@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universe Map - Galaxy View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        #galaxyCanvas {
+            display: block;
+            cursor: grab;
+        }
+        
+        #galaxyCanvas:active {
+            cursor: grabbing;
+        }
+        
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 280px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .controls h3 {
+            color: var(--accent, #667eea);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .universe-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .universe-item {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .universe-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.6);
+            transform: translateX(5px);
+        }
+        
+        .universe-item.selected {
+            background: rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+        
+        .universe-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        
+        .universe-icon {
+            font-size: 20px;
+        }
+        
+        .universe-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .universe-version {
+            font-size: 11px;
+            color: #888;
+            margin-left: auto;
+        }
+        
+        .universe-glyphs {
+            font-size: 16px;
+            letter-spacing: 2px;
+            margin-top: 6px;
+            opacity: 0.8;
+        }
+        
+        .universe-resonance {
+            font-size: 11px;
+            color: #667eea;
+            margin-top: 4px;
+        }
+        
+        .legend {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        .title {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">🌌 Universe Map</div>
+    
+    <canvas id="galaxyCanvas"></canvas>
+    
+    <div class="controls">
+        <h3>Your Universes</h3>
+        <div class="universe-list" id="universeList"></div>
+    </div>
+    
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background: #6C63FF;"></div>
+            <span>High Resonance (80+)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #00D9FF;"></div>
+            <span>Medium Resonance (50-79)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #888;"></div>
+            <span>Low Resonance (&lt;50)</span>
+        </div>
+        <div class="legend-item">
+            <span style="font-size: 16px;">━━━</span>
+            <span>Dependency Connection</span>
+        </div>
+        <div class="legend-item">
+            <span style="font-size: 16px;">╌╌╌</span>
+            <span>Parent Connection</span>
+        </div>
+    </div>
+
+    <script src="universe-registry.js"></script>
+    <script>
+        // Initialize
+        const canvas = document.getElementById('galaxyCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Initialize registry
+        let registry;
+        
+        // Wait for registry to initialize
+        async function setupRegistry() {
+            try {
+                registry = new UniverseRegistry();
+                // Wait for async init
+                await new Promise(resolve => setTimeout(resolve, 200));
+                initGalaxyMap();
+            } catch (error) {
+                console.error('Failed to initialize registry:', error);
+                // Show error to user
+                document.getElementById('universeList').innerHTML = 
+                    '<div style="color: #ff6b6b; padding: 10px;">Failed to load universes. Check console for details.</div>';
+            }
+        }
+        
+        setupRegistry();
+        
+        let selectedUniverse = null;
+        let hoveredUniverse = null;
+        
+        // Animation state
+        let stars = [];
+        let animationFrame = 0;
+        
+        // Camera state
+        let cameraX = 0;
+        let cameraY = 0;
+        let zoom = 1;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        
+        // Generate starfield
+        function generateStars(count) {
+            stars = [];
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2,
+                    opacity: Math.random() * 0.5 + 0.3
+                });
+            }
+        }
+        generateStars(200);
+        
+        function initGalaxyMap() {
+            if (!registry) {
+                console.error('Registry not initialized');
+                return;
+            }
+            
+            const graph = registry.getRelationshipGraph();
+            
+            if (!graph || !graph.nodes) {
+                console.error('Invalid graph data');
+                return;
+            }
+            
+            // Populate universe list
+            const listEl = document.getElementById('universeList');
+            if (!listEl) return;
+            
+            listEl.innerHTML = '';
+            
+            graph.nodes.forEach(node => {
+                const div = document.createElement('div');
+                div.className = 'universe-item';
+                div.innerHTML = `
+                    <div class="universe-header">
+                        <span class="universe-icon">${node.icon}</span>
+                        <span class="universe-name">${node.name}</span>
+                        <span class="universe-version">v${registry.getUniverse(node.id).version}</span>
+                    </div>
+                    <div class="universe-glyphs">${(node.glyphSequence || []).join(' ')}</div>
+                    <div class="universe-resonance">Resonance: ${node.resonance}</div>
+                `;
+                
+                div.addEventListener('click', () => {
+                    selectedUniverse = node.id;
+                    document.querySelectorAll('.universe-item').forEach(el => el.classList.remove('selected'));
+                    div.classList.add('selected');
+                    
+                    // Center camera on selected universe
+                    const pos = registry.orbitalPositions.get(node.id);
+                    cameraX = -(pos.x - canvas.width / 2);
+                    cameraY = -(pos.y - canvas.height / 2);
+                });
+                
+                listEl.appendChild(div);
+            });
+            
+            // Start animation
+            animate();
+        }
+        
+        function drawStar(star, pulse) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * pulse})`;
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function drawConnection(from, to, type) {
+            const fromPos = registry.orbitalPositions.get(from);
+            const toPos = registry.orbitalPositions.get(to);
+            
+            if (!fromPos || !toPos) return;
+            
+            const x1 = fromPos.x + cameraX;
+            const y1 = fromPos.y + cameraY;
+            const x2 = toPos.x + cameraX;
+            const y2 = toPos.y + cameraY;
+            
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            
+            if (type === 'stems-from') {
+                ctx.strokeStyle = 'rgba(102, 126, 234, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([]);
+            } else if (type === 'parent-of') {
+                ctx.strokeStyle = 'rgba(118, 75, 162, 0.2)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+            } else {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 3]);
+            }
+            
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+        
+        function drawUniverse(node) {
+            if (!registry) return;
+            
+            const pos = registry.orbitalPositions.get(node.id);
+            if (!pos) return;
+            
+            const x = pos.x + cameraX;
+            const y = pos.y + cameraY;
+            
+            // Skip if off screen
+            if (x < -100 || x > canvas.width + 100 || y < -100 || y > canvas.height + 100) {
+                return;
+            }
+            
+            const universe = registry.getUniverse(node.id);
+            if (!universe) return;
+            
+            const isSelected = selectedUniverse === node.id;
+            const isHovered = hoveredUniverse === node.id;
+            
+            // Calculate size based on resonance
+            const baseSize = 20 + (node.resonance / 100) * 30;
+            const size = isSelected ? baseSize * 1.3 : (isHovered ? baseSize * 1.1 : baseSize);
+            
+            // Pulse effect
+            const pulse = 1 + Math.sin(animationFrame * 0.05 + node.resonance) * 0.1;
+            
+            // Glow
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, size * 2);
+            gradient.addColorStop(0, `${node.color}80`);
+            gradient.addColorStop(0.5, `${node.color}20`);
+            gradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(x, y, size * 2 * pulse, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Main body
+            ctx.fillStyle = node.color;
+            ctx.beginPath();
+            ctx.arc(x, y, size * pulse, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Ring for meta universes
+            if (universe.status === 'meta') {
+                ctx.strokeStyle = node.color;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(x, y, size * 1.5 * pulse, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            
+            // Icon
+            ctx.fillStyle = '#fff';
+            ctx.font = `${size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(node.icon, x, y);
+            
+            // Name (if selected or hovered)
+            if (isSelected || isHovered) {
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(node.name, x, y - size - 20);
+                
+                // Glyph sequence
+                if (node.glyphSequence) {
+                    const glyphString = node.glyphSequence.join(' ');
+                    ctx.font = '16px Arial';
+                    ctx.fillStyle = node.color;
+                    ctx.fillText(glyphString, x, y + size + 25);
+                }
+                
+                // Signature
+                if (node.signature) {
+                    ctx.font = '10px monospace';
+                    ctx.fillStyle = '#888';
+                    ctx.fillText(node.signature, x, y + size + 45);
+                }
+            }
+        }
+        
+        function animate() {
+            if (!registry) return;
+            
+            animationFrame++;
+            
+            // Clear
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw stars
+            const starPulse = 0.8 + Math.sin(animationFrame * 0.02) * 0.2;
+            stars.forEach(star => drawStar(star, starPulse));
+            
+            // Get graph
+            const graph = registry.getRelationshipGraph();
+            
+            if (!graph || !graph.nodes || !graph.edges) {
+                requestAnimationFrame(animate);
+                return;
+            }
+            
+            // Draw connections first (behind nodes)
+            graph.edges.forEach(edge => {
+                drawConnection(edge.from, edge.to, edge.type);
+            });
+            
+            // Draw universes
+            graph.nodes.forEach(node => {
+                drawUniverse(node);
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // Mouse interaction
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            dragStartX = e.clientX - cameraX;
+            dragStartY = e.clientY - cameraY;
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                cameraX = e.clientX - dragStartX;
+                cameraY = e.clientY - dragStartY;
+            }
+            
+            // Check hover
+            if (!registry) return;
+            
+            const mouseX = e.clientX - cameraX;
+            const mouseY = e.clientY - cameraY;
+            
+            hoveredUniverse = null;
+            
+            const graph = registry.getRelationshipGraph();
+            if (!graph || !graph.nodes) return;
+            
+            for (const node of graph.nodes) {
+                const pos = registry.orbitalPositions.get(node.id);
+                if (!pos) continue;
+                
+                const dist = Math.sqrt(
+                    Math.pow(mouseX - pos.x, 2) +
+                    Math.pow(mouseY - pos.y, 2)
+                );
+                
+                const size = 20 + (node.resonance / 100) * 30;
+                if (dist < size) {
+                    hoveredUniverse = node.id;
+                    canvas.style.cursor = 'pointer';
+                    break;
+                }
+            }
+            
+            if (!hoveredUniverse && !isDragging) {
+                canvas.style.cursor = 'grab';
+            }
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            canvas.style.cursor = 'grab';
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+            hoveredUniverse = null;
+        });
+        
+        // Zoom with wheel
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
+            zoom *= zoomDelta;
+            zoom = Math.max(0.5, Math.min(zoom, 3));
+        });
+        
+        // Click to select
+        canvas.addEventListener('click', (e) => {
+            if (!isDragging && hoveredUniverse && registry) {
+                selectedUniverse = hoveredUniverse;
+                
+                // Update list selection
+                document.querySelectorAll('.universe-item').forEach((el, i) => {
+                    const graph = registry.getRelationshipGraph();
+                    if (!graph || !graph.nodes) return;
+                    
+                    if (graph.nodes[i] && graph.nodes[i].id === selectedUniverse) {
+                        el.classList.add('selected');
+                    } else {
+                        el.classList.remove('selected');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
