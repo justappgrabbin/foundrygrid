@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Self-Evolving Consciousness System - Complete</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'SF Mono', monospace;
+      background: #0a0a0a;
+      color: #00ff88;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 40px;
+      background: linear-gradient(135deg, rgba(255,170,0,0.1), rgba(255,0,255,0.1));
+      border-radius: 20px;
+    }
+    
+    h1 {
+      color: #ffaa00;
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: #888;
+      font-size: 14px;
+    }
+    
+    .main-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr 400px;
+      gap: 20px;
+    }
+    
+    @media (max-width: 1200px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .panel {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid #333;
+      border-radius: 15px;
+      padding: 25px;
+    }
+    
+    .panel-title {
+      color: #ffaa00;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    
+    .status-label {
+      color: #888;
+    }
+    
+    .status-value {
+      color: #00ff88;
+      font-weight: bold;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #00ff88, #00cc66);
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .btn.secondary {
+      background: rgba(255,255,255,0.1);
+      color: #00ff88;
+      border: 1px solid #00ff88;
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .graph-viz {
+      width: 100%;
+      height: 400px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid #333;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .node {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #00ff88;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .node.active {
+      background: #00ff88;
+      color: #000;
+      box-shadow: 0 0 20px #00ff88;
+      transform: scale(1.2);
+    }
+    
+    .edge {
+      position: absolute;
+      height: 2px;
+      background: rgba(0,255,136,0.3);
+      transform-origin: left;
+      pointer-events: none;
+    }
+    
+    .log {
+      background: rgba(0,0,0,0.8);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 15px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    
+    .log-entry {
+      padding: 5px;
+      margin-bottom: 5px;
+      border-left: 2px solid #00ff88;
+      padding-left: 10px;
+    }
+    
+    .log-entry.evolution {
+      border-left-color: #ff00ff;
+      color: #ff00ff;
+    }
+    
+    .log-entry.error {
+      border-left-color: #ff4444;
+      color: #ff4444;
+    }
+    
+    .evolution-proposal {
+      background: rgba(255,0,255,0.1);
+      border: 1px solid #ff00ff;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 10px;
+    }
+    
+    .evolution-title {
+      color: #ff00ff;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .evolution-detail {
+      color: #888;
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ff88, #00cc66);
+      transition: width 0.3s;
+    }
+    
+    .input-area {
+      width: 100%;
+      min-height: 100px;
+      padding: 15px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid #00ff88;
+      border-radius: 10px;
+      color: #00ff88;
+      font-family: inherit;
+      font-size: 13px;
+      margin-bottom: 10px;
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🧬 Self-Evolving Consciousness System</h1>
+      <p class="subtitle">
+        TinyLlama (FREE, in-browser) + Causal Graph Substrate + Self-Evolution
+      </p>
+    </header>
+    
+    <div class="main-grid">
+      <!-- LEFT: CONTROL PANEL -->
+      <div class="panel">
+        <div class="panel-title">🎛️ System Control</div>
+        
+        <div class="status-item">
+          <span class="status-label">TinyLlama</span>
+          <span class="status-value" id="llama-status">Initializing...</span>
+        </div>
+        
+        <div class="status-item">
+          <span class="status-label">Graph Nodes</span>
+          <span class="status-value" id="node-count">0</span>
+        </div>
+        
+        <div class="status-item">
+          <span class="status-label">Causal Edges</span>
+          <span class="status-value" id="edge-count">0</span>
+        </div>
+        
+        <div class="status-item">
+          <span class="status-label">Evolutions</span>
+          <span class="status-value" id="evolution-count">0</span>
+        </div>
+        
+        <div style="margin: 20px 0;">
+          <div style="font-size: 11px; color: #888; margin-bottom: 5px;">
+            TinyLlama Loading Progress
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="llama-progress" style="width: 0%"></div>
+          </div>
+        </div>
+        
+        <button class="btn" id="init-llama" onclick="initializeLlama()">
+          🦙 Initialize TinyLlama
+        </button>
+        
+        <button class="btn secondary" onclick="setupHDExample()">
+          🌊 Setup HD Gates Example
+        </button>
+        
+        <button class="btn secondary" onclick="setupBillingExample()">
+          💰 Setup Billing Example
+        </button>
+        
+        <button class="btn secondary" onclick="broadcast64()">
+          📡 Broadcast to All 64 Gates
+        </button>
+        
+        <button class="btn secondary" onclick="exportSystem()">
+          💾 Export System State
+        </button>
+      </div>
+      
+      <!-- CENTER: CAUSAL GRAPH VIZ + INTERACTION -->
+      <div class="panel">
+        <div class="panel-title">🕸️ Causal Graph (Live)</div>
+        
+        <div class="graph-viz" id="graph-viz">
+          <!-- Nodes and edges rendered here -->
+        </div>
+        
+        <div style="margin-top: 20px;">
+          <div style="font-size: 11px; color: #888; margin-bottom: 5px;">
+            Trigger Node / Send Signal:
+          </div>
+          <input 
+            type="text" 
+            id="node-input" 
+            placeholder="Node ID (e.g., gate_48)"
+            style="width: 70%; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid #333; border-radius: 8px; color: #00ff88; font-family: inherit; margin-right: 10px;"
+          >
+          <button class="btn" style="width: 25%; margin: 0;" onclick="triggerNode()">
+            ⚡ Trigger
+          </button>
+        </div>
+        
+        <div style="margin-top: 20px;">
+          <div class="panel-title" style="font-size: 13px;">📝 Event Log</div>
+          <div class="log" id="event-log">
+            <div class="log-entry">System initialized</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- RIGHT: EVOLUTION & AI -->
+      <div class="panel">
+        <div class="panel-title">🧬 Self-Evolution</div>
+        
+        <div id="evolution-proposals">
+          <p style="color: #888; font-size: 12px;">
+            System observes causal patterns and proposes new edges...
+          </p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+          <div class="panel-title" style="font-size: 13px;">💬 AI Chat (TinyLlama)</div>
+          <textarea 
+            class="input-area" 
+            id="ai-input"
+            placeholder="Ask TinyLlama anything...&#10;&#10;Example: Write a haiku about consciousness"
+          ></textarea>
+          <button class="btn" onclick="askLlama()" id="ask-btn">
+            🦙 Ask TinyLlama
+          </button>
+          <div id="ai-output" class="log" style="margin-top: 10px; display: none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script type="module">
+    // Import WebLLM
+    import { CreateWebWorkerMLCEngine } from 'https://esm.run/@mlc-ai/web-llm';
+    
+    // Global state
+    let llamaEngine = null;
+    let causalGraph = null;
+    let llamaReady = false;
+    
+    // Make available to onclick handlers
+    window.llamaEngine = null;
+    window.causalGraph = null;
+    
+    // Initialize Causal Graph
+    class SimpleCausalGraph {
+      constructor() {
+        this.nodes = new Map();
+        this.edges = [];
+        this.observedPatterns = new Map();
+        this.proposedEdges = [];
+        this.evolutionCount = 0;
+      }
+      
+      addNode(id, type, handler) {
+        this.nodes.set(id, { id, type, handler, activation: 0 });
+        updateStats();
+      }
+      
+      addEdge(from, to, strength = 1.0) {
+        this.edges.push({ from, to, strength });
+        updateStats();
+      }
+      
+      async propagate(nodeId, signal = 1.0) {
+        const node = this.nodes.get(nodeId);
+        if (!node) return;
+        
+        log(`⚡ Triggered: ${nodeId}`);
+        node.activation = Math.min(1, node.activation + signal);
+        
+        if (node.handler) {
+          await node.handler(signal);
+        }
+        
+        // Propagate to connected nodes
+        for (const edge of this.edges) {
+          if (edge.from === nodeId) {
+            setTimeout(() => {
+              this.propagate(edge.to, signal * edge.strength);
+            }, 100);
+            
+            // Learn pattern
+            const pattern = `${edge.from}→${edge.to}`;
+            this.observedPatterns.set(pattern, (this.observedPatterns.get(pattern) || 0) + 1);
+            
+            // Propose if strong
+            if (this.observedPatterns.get(pattern) > 3 && Math.random() > 0.7) {
+              this.proposeEdge(edge.from, edge.to, 0.8);
+            }
+          }
+        }
+        
+        renderGraph();
+      }
+      
+      proposeEdge(from, to, strength) {
+        const exists = this.proposedEdges.some(e => e.from === from && e.to === to);
+        if (!exists) {
+          this.proposedEdges.push({ from, to, strength });
+          renderEvolutionProposals();
+        }
+      }
+      
+      approveEvolution(index) {
+        const proposed = this.proposedEdges[index];
+        if (!proposed) return;
+        
+        this.addEdge(proposed.from, proposed.to, proposed.strength);
+        this.proposedEdges.splice(index, 1);
+        this.evolutionCount++;
+        
+        log(`🧬 EVOLVED: New edge ${proposed.from} → ${proposed.to}`, 'evolution');
+        renderEvolutionProposals();
+        updateStats();
+      }
+    }
+    
+    // Initialize graph
+    causalGraph = new SimpleCausalGraph();
+    window.causalGraph = causalGraph;
+    
+    // TinyLlama initialization
+    window.initializeLlama = async function() {
+      const btn = document.getElementById('init-llama');
+      btn.disabled = true;
+      btn.textContent = '⏳ Loading TinyLlama...';
+      
+      try {
+        llamaEngine = await CreateWebWorkerMLCEngine(
+          'TinyLlama-1.1B-Chat-v1.0-q4f16_1',
+          {
+            initProgressCallback: (progress) => {
+              const percent = (progress.progress * 100).toFixed(0);
+              document.getElementById('llama-progress').style.width = percent + '%';
+              document.getElementById('llama-status').textContent = percent + '%';
+            }
+          }
+        );
+        
+        window.llamaEngine = llamaEngine;
+        llamaReady = true;
+        document.getElementById('llama-status').textContent = 'Ready!';
+        btn.textContent = '✓ TinyLlama Ready';
+        log('✓ TinyLlama initialized (100% in-browser, FREE!)');
+      } catch (error) {
+        log(`✗ Failed to load TinyLlama: ${error.message}`, 'error');
+        btn.disabled = false;
+        btn.textContent = '🦙 Retry Initialize';
+      }
+    };
+    
+    // Ask TinyLlama
+    window.askLlama = async function() {
+      if (!llamaReady) {
+        alert('Please initialize TinyLlama first');
+        return;
+      }
+      
+      const input = document.getElementById('ai-input').value;
+      if (!input.trim()) return;
+      
+      const btn = document.getElementById('ask-btn');
+      const output = document.getElementById('ai-output');
+      
+      btn.disabled = true;
+      btn.textContent = '⏳ Thinking...';
+      output.style.display = 'block';
+      output.textContent = 'TinyLlama is thinking...';
+      
+      try {
+        const response = await llamaEngine.chat.completions.create({
+          messages: [{ role: 'user', content: input }],
+          temperature: 0.7,
+          max_gen_len: 256
+        });
+        
+        const text = response.choices[0].message.content;
+        output.textContent = `🦙 TinyLlama: ${text}`;
+        log(`💬 AI Response: ${text.substring(0, 50)}...`);
+      } catch (error) {
+        output.textContent = `Error: ${error.message}`;
+        log(`✗ AI Error: ${error.message}`, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🦙 Ask TinyLlama';
+      }
+    };
+    
+    // Setup HD Gates Example
+    window.setupHDExample = function() {
+      // Create ALL 64 gate nodes
+      for (let i = 1; i <= 64; i++) {
+        causalGraph.addNode(`gate_${i}`, 'hd_gate', (signal) => {
+          log(`🌊 Gate ${i} activated (${(signal * 100).toFixed(0)}%)`);
+        });
+      }
+      
+      // Add some causal edges between gates
+      causalGraph.addEdge('gate_48', 'gate_16', 0.8);  // Well → Skill
+      causalGraph.addEdge('gate_16', 'gate_9', 0.7);   // Skill → Focus
+      causalGraph.addEdge('gate_48', 'gate_57', 0.6);  // Well → Intuition
+      causalGraph.addEdge('gate_1', 'gate_8', 0.75);   // Creation → Contribution
+      causalGraph.addEdge('gate_13', 'gate_49', 0.8);  // Listener → Revolution
+      
+      log('✓ Created ALL 64 HD Gate nodes with causal connections');
+      renderGraph();
+    };
+    
+    // Broadcast to all 64 gates
+    window.broadcast64 = async function() {
+      const nodes = Array.from(causalGraph.nodes.keys()).filter(id => id.startsWith('gate_'));
+      if (nodes.length === 0) {
+        alert('Please setup HD Gates first!');
+        return;
+      }
+      
+      log(`📡 Broadcasting to ALL ${nodes.length} gates...`);
+      
+      for (const nodeId of nodes) {
+        await causalGraph.propagate(nodeId, 0.5);
+        await new Promise(resolve => setTimeout(resolve, 30)); // Faster animation
+      }
+      
+      log(`✓ Broadcast complete - all 64 gates activated!`);
+    };
+    
+    // Setup Billing Example
+    window.setupBillingExample = function() {
+      causalGraph.addNode('payment_received', 'billing', () => {
+        log('💰 Payment received');
+      });
+      
+      causalGraph.addNode('subscription_active', 'billing', () => {
+        log('✓ Subscription activated');
+      });
+      
+      causalGraph.addNode('premium_unlocked', 'feature', () => {
+        log('🔓 Premium features unlocked');
+      });
+      
+      causalGraph.addEdge('payment_received', 'subscription_active', 1.0);
+      causalGraph.addEdge('subscription_active', 'premium_unlocked', 1.0);
+      
+      log('✓ Billing causality configured');
+      renderGraph();
+    };
+    
+    // Broadcast to all nodes
+    window.broadcast48 = async function() {
+      const nodes = Array.from(causalGraph.nodes.keys());
+      if (nodes.length === 0) {
+        alert('Please setup nodes first (HD Gates Example)');
+        return;
+      }
+      
+      log(`📡 Broadcasting to ${nodes.length} nodes...`);
+      
+      for (const nodeId of nodes) {
+        await causalGraph.propagate(nodeId, 0.5);
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+      
+      log(`✓ Broadcast complete`);
+    };
+    
+    // Trigger single node
+    window.triggerNode = function() {
+      const nodeId = document.getElementById('node-input').value;
+      if (!nodeId || !causalGraph.nodes.has(nodeId)) {
+        alert('Node not found. Try: gate_48, payment_received, etc.');
+        return;
+      }
+      
+      causalGraph.propagate(nodeId, 1.0);
+    };
+    
+    // Render graph
+    function renderGraph() {
+      const viz = document.getElementById('graph-viz');
+      viz.innerHTML = '';
+      
+      const nodes = Array.from(causalGraph.nodes.values());
+      const edges = causalGraph.edges;
+      
+      // Draw edges first
+      edges.forEach(edge => {
+        const fromNode = nodes.find(n => n.id === edge.from);
+        const toNode = nodes.find(n => n.id === edge.to);
+        if (!fromNode || !toNode) return;
+        
+        // Calculate positions (simple circle layout)
+        const fromIdx = nodes.indexOf(fromNode);
+        const toIdx = nodes.indexOf(toNode);
+        const total = nodes.length;
+        
+        const fromAngle = (fromIdx / total) * Math.PI * 2;
+        const toAngle = (toIdx / total) * Math.PI * 2;
+        
+        const centerX = 200;
+        const centerY = 200;
+        const radius = 150;
+        
+        const x1 = centerX + Math.cos(fromAngle) * radius;
+        const y1 = centerY + Math.sin(fromAngle) * radius;
+        const x2 = centerX + Math.cos(toAngle) * radius;
+        const y2 = centerY + Math.sin(toAngle) * radius;
+        
+        const length = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+        const angle = Math.atan2(y2-y1, x2-x1) * 180 / Math.PI;
+        
+        const edgeEl = document.createElement('div');
+        edgeEl.className = 'edge';
+        edgeEl.style.width = length + 'px';
+        edgeEl.style.left = x1 + 'px';
+        edgeEl.style.top = y1 + 'px';
+        edgeEl.style.transform = `rotate(${angle}deg)`;
+        edgeEl.style.opacity = edge.strength;
+        
+        viz.appendChild(edgeEl);
+      });
+      
+      // Draw nodes
+      nodes.forEach((node, i) => {
+        const angle = (i / nodes.length) * Math.PI * 2;
+        const centerX = 200;
+        const centerY = 200;
+        const radius = 150;
+        
+        const x = centerX + Math.cos(angle) * radius - 20;
+        const y = centerY + Math.sin(angle) * radius - 20;
+        
+        const nodeEl = document.createElement('div');
+        nodeEl.className = 'node' + (node.activation > 0 ? ' active' : '');
+        nodeEl.style.left = x + 'px';
+        nodeEl.style.top = y + 'px';
+        nodeEl.textContent = node.id.split('_')[1] || node.id.substring(0,3);
+        nodeEl.title = node.id;
+        nodeEl.onclick = () => causalGraph.propagate(node.id, 1.0);
+        
+        viz.appendChild(nodeEl);
+        
+        // Decay activation
+        setTimeout(() => {
+          node.activation *= 0.9;
+          if (node.activation < 0.1) node.activation = 0;
+        }, 1000);
+      });
+    }
+    
+    // Render evolution proposals
+    function renderEvolutionProposals() {
+      const container = document.getElementById('evolution-proposals');
+      const proposals = causalGraph.proposedEdges;
+      
+      if (proposals.length === 0) {
+        container.innerHTML = '<p style="color: #888; font-size: 12px;">No evolution proposals yet...</p>';
+        return;
+      }
+      
+      container.innerHTML = proposals.map((p, i) => `
+        <div class="evolution-proposal">
+          <div class="evolution-title">Proposed Edge</div>
+          <div class="evolution-detail">
+            ${p.from} → ${p.to} (strength: ${(p.strength * 100).toFixed(0)}%)
+          </div>
+          <button class="btn" style="font-size: 11px; padding: 8px;" onclick="causalGraph.approveEvolution(${i})">
+            ✓ Approve Evolution
+          </button>
+        </div>
+      `).join('');
+    }
+    
+    // Logging
+    function log(message, type = 'info') {
+      const logEl = document.getElementById('event-log');
+      const entry = document.createElement('div');
+      entry.className = 'log-entry ' + type;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logEl.insertBefore(entry, logEl.firstChild);
+      
+      // Keep only last 50 entries
+      while (logEl.children.length > 50) {
+        logEl.removeChild(logEl.lastChild);
+      }
+    }
+    
+    // Update stats
+    function updateStats() {
+      document.getElementById('node-count').textContent = causalGraph.nodes.size;
+      document.getElementById('edge-count').textContent = causalGraph.edges.length;
+      document.getElementById('evolution-count').textContent = causalGraph.evolutionCount;
+    }
+    
+    // Export system
+    window.exportSystem = function() {
+      const state = {
+        nodes: Array.from(causalGraph.nodes.entries()),
+        edges: causalGraph.edges,
+        evolutions: causalGraph.evolutionCount,
+        timestamp: new Date().toISOString()
+      };
+      
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `causal-system-${Date.now()}.json`;
+      a.click();
+      
+      log('💾 System state exported');
+    };
+    
+    // Animation loop
+    setInterval(renderGraph, 1000);
+    
+    // Initial render
+    renderGraph();
+    updateStats();
+  </script>
+</body>
+</html>

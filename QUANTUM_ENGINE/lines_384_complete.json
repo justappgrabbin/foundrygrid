@@ -1,0 +1,583 @@
+{
+  "source": "Ra Uru Hu - The Rave I'Ching Line Companion",
+  "total_lines": 384,
+  "structure": "64 Gates \u00d7 6 Lines",
+  "lines": {
+    "1": {
+      "gate_name": "The Creative",
+      "1": "Objectivity",
+      "2": "The Energy to Attract Society",
+      "3": "Aloneness as the Medium of Creativity",
+      "4": "The Energy to Sustain Creative Work",
+      "5": "Love Is Light",
+      "6": "Creation Is Independent of Will"
+    },
+    "2": {
+      "gate_name": "The Receptive",
+      "1": "Fixation",
+      "2": "Intelligent Application",
+      "3": "Secretiveness",
+      "4": "Patience",
+      "5": "Genius",
+      "6": "Intuition"
+    },
+    "3": {
+      "gate_name": "Difficulty at the Beginning",
+      "1": "Surrender",
+      "2": "Victimization",
+      "3": "Charisma",
+      "4": "Survival",
+      "5": "Immaturity",
+      "6": "Synthesis"
+    },
+    "4": {
+      "gate_name": "Youthful Folly",
+      "1": "Pleasure",
+      "2": "Acceptance",
+      "3": "Irresponsibility",
+      "4": "The Liar",
+      "5": "Seduction",
+      "6": "Excess"
+    },
+    "5": {
+      "gate_name": "Waiting",
+      "1": "Perseverance",
+      "2": "Inner Peace",
+      "3": "Compulsiveness",
+      "4": "The Hunter",
+      "5": "Joy",
+      "6": "Yielding"
+    },
+    "6": {
+      "gate_name": "Conflict",
+      "1": "Retreat",
+      "2": "The Guerilla",
+      "3": "Allegiance",
+      "4": "Triumph",
+      "5": "Arbitration",
+      "6": "The Peacemaker"
+    },
+    "7": {
+      "gate_name": "The Army",
+      "1": "Authoritarian",
+      "2": "The Democrat",
+      "3": "The Anarchist",
+      "4": "The Abdicator",
+      "5": "The General",
+      "6": "The Administrator"
+    },
+    "8": {
+      "gate_name": "Holding Together",
+      "1": "Honesty",
+      "2": "Service",
+      "3": "The Phoney",
+      "4": "Respect",
+      "5": "Dharma",
+      "6": "Communion"
+    },
+    "9": {
+      "gate_name": "The Taming Power of the Small",
+      "1": "Sensibility",
+      "2": "Misery Loves Company",
+      "3": "The Straw That Breaks the Camel's Back",
+      "4": "Dedication",
+      "5": "Faith",
+      "6": "Gratitude"
+    },
+    "10": {
+      "gate_name": "Treading",
+      "1": "Modesty",
+      "2": "The Hermit",
+      "3": "The Martyr",
+      "4": "The Opportunist",
+      "5": "The Heretic",
+      "6": "The Role Model"
+    },
+    "11": {
+      "gate_name": "Peace",
+      "1": "Attunement",
+      "2": "Rigour",
+      "3": "The Realist",
+      "4": "The Teacher",
+      "5": "The Philanthropist",
+      "6": "Adaptability"
+    },
+    "12": {
+      "gate_name": "Standstill",
+      "1": "The Monk",
+      "2": "Purification",
+      "3": "Confession",
+      "4": "The Prophet",
+      "5": "The Pragmatist",
+      "6": "Metamorphosis"
+    },
+    "13": {
+      "gate_name": "Fellowship of Man",
+      "1": "Empathy",
+      "2": "Bigotry",
+      "3": "Pessimism",
+      "4": "Fatigue",
+      "5": "The Saviour",
+      "6": "The Optimist"
+    },
+    "14": {
+      "gate_name": "Possession in Great Measure",
+      "1": "Money Isn't Everything",
+      "2": "Management",
+      "3": "Service",
+      "4": "Security",
+      "5": "Arrogance",
+      "6": "Humility"
+    },
+    "15": {
+      "gate_name": "Modesty",
+      "1": "Duty",
+      "2": "Influence",
+      "3": "Ego Inflation",
+      "4": "The Wallflower",
+      "5": "Sensitivity",
+      "6": "Self-Defense"
+    },
+    "16": {
+      "gate_name": "Enthusiasm",
+      "1": "Gullibility",
+      "2": "The Graciousness of Talent",
+      "3": "The Innovator",
+      "4": "Indifference",
+      "5": "The Grinch",
+      "6": "Delusion"
+    },
+    "17": {
+      "gate_name": "Following",
+      "1": "The Bodhisattva",
+      "2": "The Ideologue",
+      "3": "The Leader",
+      "4": "Self-Actualization",
+      "5": "Influence",
+      "6": "Openness"
+    },
+    "18": {
+      "gate_name": "Work on What Has Been Spoilt",
+      "1": "Arrest",
+      "2": "Therapy",
+      "3": "Union",
+      "4": "Adaptability",
+      "5": "Terminal Disease",
+      "6": "Integrity"
+    },
+    "19": {
+      "gate_name": "Approach",
+      "1": "The Recluse",
+      "2": "Sacrifice",
+      "3": "The Team Player",
+      "4": "Dedication",
+      "5": "Service",
+      "6": "Interdependence"
+    },
+    "20": {
+      "gate_name": "Contemplation",
+      "1": "Wisdom",
+      "2": "Realism",
+      "3": "Application",
+      "4": "Self-Defense",
+      "5": "The Democrat",
+      "6": "Superficiality"
+    },
+    "21": {
+      "gate_name": "Biting Through",
+      "1": "Chaos",
+      "2": "The Hunter",
+      "3": "Stubbornness",
+      "4": "Powerlessness",
+      "5": "Alliance",
+      "6": "Warning"
+    },
+    "22": {
+      "gate_name": "Grace",
+      "1": "Restraint",
+      "2": "Directness",
+      "3": "Sensibility",
+      "4": "Maturity",
+      "5": "Self-Restraint",
+      "6": "Withdrawal"
+    },
+    "23": {
+      "gate_name": "Splitting Apart",
+      "1": "Stability",
+      "2": "Assimilation",
+      "3": "Fragmentation",
+      "4": "Individuality",
+      "5": "Self-Defense",
+      "6": "Proselytization"
+    },
+    "24": {
+      "gate_name": "Returning",
+      "1": "The Gift Horse",
+      "2": "Resignation",
+      "3": "The Hermit",
+      "4": "Acceptance",
+      "5": "Rationalization",
+      "6": "The Sinner"
+    },
+    "25": {
+      "gate_name": "Innocence",
+      "1": "Innocence",
+      "2": "Recapitulation",
+      "3": "Survival",
+      "4": "Sensitivity",
+      "5": "Control",
+      "6": "Selflessness"
+    },
+    "26": {
+      "gate_name": "The Taming Power of the Great",
+      "1": "Authority",
+      "2": "Adaptability",
+      "3": "Censorship",
+      "4": "Influence",
+      "5": "The Egoist",
+      "6": "A Bird in the Hand"
+    },
+    "27": {
+      "gate_name": "Nourishment",
+      "1": "Wariness",
+      "2": "Accountability",
+      "3": "Generosity",
+      "4": "Greed",
+      "5": "Responsibility",
+      "6": "Selfishness"
+    },
+    "28": {
+      "gate_name": "Preponderance of the Great",
+      "1": "Blinded by the Light",
+      "2": "Strange Bedfellows",
+      "3": "Blame",
+      "4": "Adventurism",
+      "5": "Shaping",
+      "6": "Preparation"
+    },
+    "29": {
+      "gate_name": "The Abysmal",
+      "1": "Confusion",
+      "2": "Overreach",
+      "3": "Directness",
+      "4": "Evaluation and Perseverance",
+      "5": "Evaluation",
+      "6": "The Dilettante"
+    },
+    "30": {
+      "gate_name": "Clinging Fire",
+      "1": "Enforcement",
+      "2": "Irony",
+      "3": "Burnout",
+      "4": "Resignation",
+      "5": "Pragmatism",
+      "6": "Composure"
+    },
+    "31": {
+      "gate_name": "Influence",
+      "1": "Application",
+      "2": "Iron Fist",
+      "3": "Identification",
+      "4": "Selectivity",
+      "5": "Arrogance",
+      "6": "Manifestation"
+    },
+    "32": {
+      "gate_name": "Duration",
+      "1": "Tranquility",
+      "2": "Flexibility",
+      "3": "Endurance",
+      "4": "Silence",
+      "5": "Caution",
+      "6": "Conservation"
+    },
+    "33": {
+      "gate_name": "Retreat",
+      "1": "Fame",
+      "2": "Timing",
+      "3": "Dignity",
+      "4": "Spirit",
+      "5": "Surrender",
+      "6": "Avoidance"
+    },
+    "34": {
+      "gate_name": "Power of the Great",
+      "1": "Common Sense",
+      "2": "Power",
+      "3": "Triumph",
+      "4": "The Egoist",
+      "5": "Nocturnal Power",
+      "6": "The Bully"
+    },
+    "35": {
+      "gate_name": "Progress",
+      "1": "Experience",
+      "2": "Progression",
+      "3": "Persuasion",
+      "4": "Survival",
+      "5": "Arrest",
+      "6": "Assistance"
+    },
+    "36": {
+      "gate_name": "Darkening of the Light",
+      "1": "Justice",
+      "2": "Confusion",
+      "3": "The Opportunist",
+      "4": "Transition",
+      "5": "Support",
+      "6": "Resistance"
+    },
+    "37": {
+      "gate_name": "Family",
+      "1": "The Broker",
+      "2": "The Teacher",
+      "3": "Leadership by Example",
+      "4": "Evenhandedness",
+      "5": "Responsibility",
+      "6": "The Mother/Father"
+    },
+    "38": {
+      "gate_name": "Opposition",
+      "1": "The Utopian",
+      "2": "Alienation",
+      "3": "Investigation",
+      "4": "Alliance",
+      "5": "Rigidity",
+      "6": "Qualification"
+    },
+    "39": {
+      "gate_name": "Obstruction",
+      "1": "Rebellion",
+      "2": "Single-Mindedness",
+      "3": "Temperance",
+      "4": "Dangers",
+      "5": "Confrontation",
+      "6": "Provocation"
+    },
+    "40": {
+      "gate_name": "Deliverance",
+      "1": "Exhaustion",
+      "2": "Righteousness",
+      "3": "The Opportunist",
+      "4": "Service",
+      "5": "Resolve",
+      "6": "Recuperation"
+    },
+    "41": {
+      "gate_name": "Decrease",
+      "1": "Contagion",
+      "2": "Authorization",
+      "3": "Correction",
+      "4": "Conservation",
+      "5": "Caution",
+      "6": "Restraint"
+    },
+    "42": {
+      "gate_name": "Increase",
+      "1": "Cultivation",
+      "2": "Self-Actualization",
+      "3": "Maximization",
+      "4": "Trial and Error",
+      "5": "Identification",
+      "6": "Diversification"
+    },
+    "43": {
+      "gate_name": "Breakthrough",
+      "1": "Advancement",
+      "2": "Progression",
+      "3": "One-Trackedness",
+      "4": "Expediency",
+      "5": "Dedication",
+      "6": "Patience"
+    },
+    "44": {
+      "gate_name": "Coming to Meet",
+      "1": "Aloofness",
+      "2": "Manipulation",
+      "3": "Honesty",
+      "4": "Intervention",
+      "5": "Management",
+      "6": "Conditions"
+    },
+    "45": {
+      "gate_name": "Gathering Together",
+      "1": "Reconsideration",
+      "2": "Leadership",
+      "3": "Direction",
+      "4": "Exclusion",
+      "5": "Consensus",
+      "6": "Canvassing"
+    },
+    "46": {
+      "gate_name": "Pushing Upward",
+      "1": "Integrity",
+      "2": "Pacing",
+      "3": "Impact",
+      "4": "Projection",
+      "5": "The Prima Donna",
+      "6": "Being Discovered"
+    },
+    "47": {
+      "gate_name": "Oppression",
+      "1": "Futility",
+      "2": "The Saint",
+      "3": "Repression",
+      "4": "Self-Oppression",
+      "5": "Ambition",
+      "6": "Taking Stock"
+    },
+    "48": {
+      "gate_name": "The Well",
+      "1": "Self-Fulfillment",
+      "2": "Action",
+      "3": "Restructuring",
+      "4": "Incommunicado",
+      "5": "Degeneracy",
+      "6": "Insignificance"
+    },
+    "49": {
+      "gate_name": "Revolution",
+      "1": "Attraction",
+      "2": "Organization",
+      "3": "Platform",
+      "4": "Popular Discontent",
+      "5": "Last Resort",
+      "6": "The Law of Necessity"
+    },
+    "50": {
+      "gate_name": "The Cauldron",
+      "1": "Leadership",
+      "2": "Consistency",
+      "3": "Corruption",
+      "4": "Adaptability",
+      "5": "Determination",
+      "6": "The Immigrant"
+    },
+    "51": {
+      "gate_name": "The Arousing",
+      "1": "Self-Realization",
+      "2": "Initiative",
+      "3": "Limitation",
+      "4": "Adaptation",
+      "5": "Withdrawal",
+      "6": "Reference"
+    },
+    "52": {
+      "gate_name": "Keeping Still",
+      "1": "Peace",
+      "2": "Explanation",
+      "3": "Self-Destruction",
+      "4": "Self-Discipline",
+      "5": "Restraint",
+      "6": "Think Before You Leap"
+    },
+    "53": {
+      "gate_name": "Development",
+      "1": "Phasing",
+      "2": "Progression",
+      "3": "Assurance",
+      "4": "Practicality",
+      "5": "Maturity",
+      "6": "Development"
+    },
+    "54": {
+      "gate_name": "The Marrying Maiden",
+      "1": "Philanthropy",
+      "2": "Magnanimity",
+      "3": "Enlightenment",
+      "4": "Selectivity",
+      "5": "Discretion",
+      "6": "Ambition"
+    },
+    "55": {
+      "gate_name": "Abundance",
+      "1": "Self-Reliance",
+      "2": "Growth",
+      "3": "Assimilation",
+      "4": "The Victim",
+      "5": "Restraint",
+      "6": "Co-Operation"
+    },
+    "56": {
+      "gate_name": "The Wanderer",
+      "1": "Caution",
+      "2": "Attraction",
+      "3": "Expediency",
+      "4": "Alienation",
+      "5": "Linkage",
+      "6": "Quality"
+    },
+    "57": {
+      "gate_name": "The Gentle",
+      "1": "Utilization",
+      "2": "Progression",
+      "3": "Application",
+      "4": "Overconfidence",
+      "5": "Caution",
+      "6": "Confusion"
+    },
+    "58": {
+      "gate_name": "The Joyous",
+      "1": "Leadership",
+      "2": "Defense",
+      "3": "Regret",
+      "4": "Self-Discipline",
+      "5": "Service",
+      "6": "Acceptance"
+    },
+    "59": {
+      "gate_name": "Dispersion",
+      "1": "One-Night Stand",
+      "2": "The Femme Fatale/Casanova",
+      "3": "Brotherhood/Sisterhood",
+      "4": "Openness",
+      "5": "Shyness",
+      "6": "The Preacher"
+    },
+    "60": {
+      "gate_name": "Limitation",
+      "1": "Rigidity",
+      "2": "Leadership",
+      "3": "Resourcefulness",
+      "4": "Conservatism",
+      "5": "Decisiveness",
+      "6": "Acceptance"
+    },
+    "61": {
+      "gate_name": "Inner Truth",
+      "1": "Appeal",
+      "2": "Influence",
+      "3": "Mystery",
+      "4": "Interrogation",
+      "5": "The Gift of Inquiry",
+      "6": "Occult Knowledge"
+    },
+    "62": {
+      "gate_name": "Preponderance of the Small",
+      "1": "Self-Discipline",
+      "2": "Meticulousness",
+      "3": "Asceticism",
+      "4": "Discovery",
+      "5": "Restraint",
+      "6": "Routine"
+    },
+    "63": {
+      "gate_name": "After Completion",
+      "1": "Nostalgia",
+      "2": "Belief",
+      "3": "Investigation",
+      "4": "Doubt",
+      "5": "Pragmatism",
+      "6": "Composure"
+    },
+    "64": {
+      "gate_name": "Before Completion",
+      "1": "Objectivity",
+      "2": "The Guide",
+      "3": "Conviction",
+      "4": "Imagination",
+      "5": "Qualification",
+      "6": "Confusion"
+    }
+  }
+}
