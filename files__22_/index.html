@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynthAI - Consciousness Analysis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🧬 SynthAI</h1>
+            <p class="subtitle">Ontological Consciousness Analysis</p>
+            <div id="current-position" class="current-position"></div>
+        </header>
+
+        <!-- Main Interface -->
+        <main>
+            <!-- Input Section -->
+            <section class="input-section">
+                <textarea 
+                    id="user-input" 
+                    placeholder="Write anything... your thoughts, feelings, questions..."
+                    rows="4"
+                ></textarea>
+                
+                <!-- Tone Selector -->
+                <div class="tone-selector">
+                    <label>Response Tone:</label>
+                    <div class="tone-buttons">
+                        <button class="tone-btn active" data-tone="venom">🔥 Venom</button>
+                        <button class="tone-btn" data-tone="prime">⚙️ Prime</button>
+                        <button class="tone-btn" data-tone="echo">🌊 Echo</button>
+                        <button class="tone-btn" data-tone="dream">✨ Dream</button>
+                        <button class="tone-btn" data-tone="softcore">🌱 Softcore</button>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button id="analyze-btn" class="primary-btn">Analyze Consciousness</button>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="technical-toggle">
+                        <span>Show Technical Details</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Response Section -->
+            <section class="response-section" id="response-section" style="display: none;">
+                <!-- Coordinate Display -->
+                <div class="coordinate-display">
+                    <div class="coordinate-badge">
+                        <span class="label">Coordinate</span>
+                        <span id="coordinate" class="value">-</span>
+                    </div>
+                    <div class="coordinate-badge">
+                        <span class="label">Position</span>
+                        <span id="position" class="value">-</span>
+                    </div>
+                    <div class="coordinate-badge">
+                        <span class="label">Gate</span>
+                        <span id="gate" class="value">-</span>
+                    </div>
+                    <div class="coordinate-badge">
+                        <span class="label">Dimension</span>
+                        <span id="dimension" class="value">-</span>
+                    </div>
+                </div>
+
+                <!-- Probability Vector -->
+                <div class="probability-section">
+                    <h3>Consciousness Distribution</h3>
+                    <div id="probability-bars" class="probability-bars"></div>
+                </div>
+
+                <!-- Metrics -->
+                <div class="metrics-section">
+                    <div class="metric">
+                        <span class="metric-label">Coherence</span>
+                        <div class="metric-bar">
+                            <div id="coherence-bar" class="metric-fill"></div>
+                        </div>
+                        <span id="coherence-value" class="metric-value">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Stability</span>
+                        <div class="metric-bar">
+                            <div id="stability-bar" class="metric-fill"></div>
+                        </div>
+                        <span id="stability-value" class="metric-value">-</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Confidence</span>
+                        <div class="metric-bar">
+                            <div id="confidence-bar" class="metric-fill"></div>
+                        </div>
+                        <span id="confidence-value" class="metric-value">-</span>
+                    </div>
+                </div>
+
+                <!-- Response Text -->
+                <div class="response-text">
+                    <h3>SynthAI Response</h3>
+                    <div id="response-content" class="response-content"></div>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing consciousness...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="error" class="error" style="display: none;"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>Foundation: Geometric Truth • Detection: Pattern Recognition • Personality: Tone Application</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

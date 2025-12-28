@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameGAN - Behavioral Prediction Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        select, input[type="number"], input[type="range"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        .range-value {
+            display: inline-block;
+            margin-left: 10px;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .result-panel {
+            grid-column: 1 / -1;
+        }
+        
+        .prediction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .metric-subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .warnings, .suggestions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        
+        .suggestions {
+            background: #d1ecf1;
+            border-left-color: #17a2b8;
+        }
+        
+        .warnings h3, .suggestions h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .warnings ul, .suggestions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .warnings li, .suggestions li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .warnings li:before {
+            content: "⚠️";
+            position: absolute;
+            left: 0;
+        }
+        
+        .suggestions li:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+        }
+        
+        .outcome-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .outcome-integration { background: #d4edda; color: #155724; }
+        .outcome-partial { background: #fff3cd; color: #856404; }
+        .outcome-delayed { background: #f8d7da; color: #721c24; }
+        .outcome-rejection { background: #f8d7da; color: #721c24; }
+        
+        .center-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .center-toggle input[type="checkbox"] {
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 GameGAN - Behavioral Prediction Engine</h1>
+        
+        <div class="grid">
+            <!-- Chart Configuration -->
+            <div class="panel">
+                <h2>Chart Configuration</h2>
+                
+                <div class="input-group">
+                    <label>Type</label>
+                    <select id="type">
+                        <option value="Manifestor">Manifestor</option>
+                        <option value="Generator">Generator</option>
+                        <option value="Manifesting Generator">Manifesting Generator</option>
+                        <option value="Projector" selected>Projector</option>
+                        <option value="Reflector">Reflector</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Profile</label>
+                    <select id="profile">
+                        <option value="1/3">1/3</option>
+                        <option value="1/4">1/4</option>
+                        <option value="2/4" selected>2/4</option>
+                        <option value="2/5">2/5</option>
+                        <option value="3/5">3/5</option>
+                        <option value="3/6">3/6</option>
+                        <option value="4/6">4/6</option>
+                        <option value="4/1">4/1</option>
+                        <option value="5/1">5/1</option>
+                        <option value="5/2">5/2</option>
+                        <option value="6/2">6/2</option>
+                        <option value="6/3">6/3</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Authority</label>
+                    <select id="authority">
+                        <option value="emotional">Emotional</option>
+                        <option value="sacral">Sacral</option>
+                        <option value="splenic" selected>Splenic</option>
+                        <option value="ego">Ego</option>
+                        <option value="self">Self</option>
+                        <option value="mental">Mental</option>
+                        <option value="lunar">Lunar</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Definition</label>
+                    <select id="definition">
+                        <option value="none">None</option>
+                        <option value="single" selected>Single</option>
+                        <option value="split">Split</option>
+                        <option value="triple split">Triple Split</option>
+                        <option value="quadruple split">Quadruple Split</option>
+                    </select>
+                </div>
+                
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #667eea;">Defined Centers</h3>
+                <div class="center-toggle"><input type="checkbox" id="head"> <label for="head">Head</label></div>
+                <div class="center-toggle"><input type="checkbox" id="ajna" checked> <label for="ajna">Ajna</label></div>
+                <div class="center-toggle"><input type="checkbox" id="throat"> <label for="throat">Throat</label></div>
+                <div class="center-toggle"><input type="checkbox" id="g" checked> <label for="g">G Center</label></div>
+                <div class="center-toggle"><input type="checkbox" id="heart"> <label for="heart">Heart/Ego</label></div>
+                <div class="center-toggle"><input type="checkbox" id="sacral"> <label for="sacral">Sacral</label></div>
+                <div class="center-toggle"><input type="checkbox" id="spleen" checked> <label for="spleen">Spleen</label></div>
+                <div class="center-toggle"><input type="checkbox" id="solar"> <label for="solar">Solar Plexus</label></div>
+                <div class="center-toggle"><input type="checkbox" id="root"> <label for="root">Root</label></div>
+            </div>
+            
+            <!-- Intervention Configuration -->
+            <div class="panel">
+                <h2>Intervention Settings</h2>
+                
+                <div class="input-group">
+                    <label>Content</label>
+                    <textarea id="content">You might benefit from taking a break and reflecting on your energy levels</textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label>Tone</label>
+                    <select id="tone">
+                        <option value="very_gentle">Very Gentle</option>
+                        <option value="gentle" selected>Gentle</option>
+                        <option value="direct">Direct</option>
+                        <option value="supportive">Supportive</option>
+                        <option value="directive">Directive</option>
+                        <option value="playful">Playful</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Style</label>
+                    <select id="style">
+                        <option value="informative" selected>Informative</option>
+                        <option value="responsive">Responsive</option>
+                        <option value="patient">Patient</option>
+                        <option value="directive">Directive</option>
+                        <option value="urgent">Urgent</option>
+                        <option value="conversational">Conversational</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Complexity</label>
+                    <select id="complexity">
+                        <option value="low" selected>Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                
+                <div class="center-toggle">
+                    <input type="checkbox" id="allowsResponse" checked>
+                    <label for="allowsResponse">Allows Response</label>
+                </div>
+                
+                <div class="center-toggle">
+                    <input type="checkbox" id="requiresImmediate">
+                    <label for="requiresImmediate">Requires Immediate Action</label>
+                </div>
+                
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #667eea;">Context</h3>
+                
+                <div class="input-group">
+                    <label>Emotional Wave</label>
+                    <select id="emotionalWave">
+                        <option value="high">High</option>
+                        <option value="neutral" selected>Neutral</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Trust Level: <span class="range-value" id="trustValue">0.6</span></label>
+                    <input type="range" id="trustLevel" min="0" max="1" step="0.1" value="0.6">
+                </div>
+                
+                <div class="input-group">
+                    <label>Session Count: <span class="range-value" id="sessionValue">10</span></label>
+                    <input type="range" id="sessionCount" min="1" max="50" step="1" value="10">
+                </div>
+                
+                <button onclick="runPrediction()">🎯 Run Prediction</button>
+            </div>
+            
+            <!-- Results -->
+            <div class="panel result-panel">
+                <h2>Prediction Results</h2>
+                <div id="results">
+                    <p style="text-align: center; color: #999; padding: 40px;">Click "Run Prediction" to see results</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="gamegan.js"></script>
+    <script>
+        // Update range displays
+        document.getElementById('trustLevel').addEventListener('input', e => {
+            document.getElementById('trustValue').textContent = e.target.value;
+        });
+        
+        document.getElementById('sessionCount').addEventListener('input', e => {
+            document.getElementById('sessionValue').textContent = e.target.value;
+        });
+        
+        function runPrediction() {
+            // Gather chart data
+            const chart = {
+                body: {
+                    type: document.getElementById('type').value,
+                    profile: document.getElementById('profile').value,
+                    authority: document.getElementById('authority').value,
+                    definition: document.getElementById('definition').value,
+                    head: { defined: document.getElementById('head').checked },
+                    ajna: { defined: document.getElementById('ajna').checked },
+                    throat: { defined: document.getElementById('throat').checked },
+                    g: { defined: document.getElementById('g').checked },
+                    heart: { defined: document.getElementById('heart').checked },
+                    sacral: { defined: document.getElementById('sacral').checked },
+                    spleen: { defined: document.getElementById('spleen').checked },
+                    solar: { defined: document.getElementById('solar').checked },
+                    root: { defined: document.getElementById('root').checked }
+                },
+                mind: {},
+                heart: {}
+            };
+            
+            // Gather intervention data
+            const intervention = {
+                content: document.getElementById('content').value,
+                tone: document.getElementById('tone').value,
+                style: document.getElementById('style').value,
+                complexity: document.getElementById('complexity').value,
+                allowsResponse: document.getElementById('allowsResponse').checked,
+                requiresImmediate: document.getElementById('requiresImmediate').checked
+            };
+            
+            // Gather context
+            const context = {
+                emotionalWave: document.getElementById('emotionalWave').value,
+                initialTrust: parseFloat(document.getElementById('trustLevel').value),
+                sessionCount: parseInt(document.getElementById('sessionCount').value)
+            };
+            
+            // Run prediction
+            const prediction = predictResponse(chart, intervention, context);
+            
+            // Display results
+            displayResults(prediction);
+        }
+        
+        function displayResults(prediction) {
+            const outcomeClass = `outcome-${prediction.predictedOutcome}`;
+            
+            let html = `
+                <div class="prediction-grid">
+                    <div class="metric">
+                        <div class="metric-label">Acceptance</div>
+                        <div class="metric-value">${(prediction.acceptanceProbability * 100).toFixed(0)}%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Resistance</div>
+                        <div class="metric-value">${(prediction.resistanceLevel * 100).toFixed(0)}%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Confidence</div>
+                        <div class="metric-value">${(prediction.confidence * 100).toFixed(0)}%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Outcome</div>
+                        <div class="metric-value" style="font-size: 20px;">
+                            <span class="outcome-badge ${outcomeClass}">${prediction.predictedOutcome}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="prediction-grid">
+                    <div class="metric">
+                        <div class="metric-label">Optimal Tone</div>
+                        <div class="metric-value" style="font-size: 20px;">${prediction.optimalTone}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Primary Sense</div>
+                        <div class="metric-value" style="font-size: 20px;">${prediction.optimalSense}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Secondary Sense</div>
+                        <div class="metric-value" style="font-size: 20px;">${prediction.secondarySense}</div>
+                    </div>
+                </div>
+                
+                <div class="prediction-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                    <div class="metric">
+                        <div class="metric-label">Openness</div>
+                        <div class="metric-value" style="font-size: 24px;">${(prediction.details.openness * 100).toFixed(0)}%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Emotional State</div>
+                        <div class="metric-value" style="font-size: 18px;">${prediction.details.emotionalState}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Authority Aligned</div>
+                        <div class="metric-value" style="font-size: 24px;">${prediction.details.authorityAlignment ? '✓' : '✗'}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Processing Mode</div>
+                        <div class="metric-value" style="font-size: 18px;">${prediction.details.processingMode}</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Trust Level</div>
+                        <div class="metric-value" style="font-size: 24px;">${(prediction.details.trustLevel * 100).toFixed(0)}%</div>
+                    </div>
+                </div>
+            `;
+            
+            if (prediction.warnings.length > 0) {
+                html += `
+                    <div class="warnings">
+                        <h3>⚠️ Warnings</h3>
+                        <ul>
+                            ${prediction.warnings.map(w => `<li>${w}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (prediction.suggestions.length > 0) {
+                html += `
+                    <div class="suggestions">
+                        <h3>💡 Suggestions</h3>
+                        <ul>
+                            ${prediction.suggestions.map(s => `<li>${s}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('results').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

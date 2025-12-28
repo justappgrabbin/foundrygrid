@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynthAI - Your Daily Sync</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            color: #a0a0b0;
+            font-size: 0.95em;
+        }
+        
+        /* Input Section */
+        .input-section {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .input-label {
+            font-size: 1.1em;
+            color: #ffffff;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 20px;
+            background: rgba(15, 15, 30, 0.8);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
+            color: #e0e0e0;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea::placeholder {
+            color: #606070;
+        }
+        
+        .sync-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        
+        .sync-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .sync-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Daily Sync Result */
+        .daily-sync {
+            display: none;
+        }
+        
+        .sync-card {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .greeting {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        
+        .vibe-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .vibe-emoji {
+            font-size: 3em;
+        }
+        
+        .vibe-content h2 {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .vibe-content p {
+            color: #a0a0b0;
+            font-size: 1em;
+        }
+        
+        /* Energy Section */
+        .energy-section {
+            background: rgba(15, 15, 30, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .energy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .energy-level {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        /* Recommendations */
+        .recommendations-section {
+            margin: 30px 0;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .recommendation-card {
+            background: rgba(15, 15, 30, 0.5);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .recommendation-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .recommendation-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        
+        .recommendation-icon {
+            font-size: 2em;
+        }
+        
+        .recommendation-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        .recommendation-meta {
+            color: #a0a0b0;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .recommendation-description {
+            color: #e0e0e0;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        
+        .match-reason {
+            color: #667eea;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+        
+        /* Intervention */
+        .intervention-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .intervention-title {
+            font-size: 1.3em;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+        
+        .intervention-action {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .intervention-reason {
+            color: #a0a0b0;
+            line-height: 1.6;
+        }
+        
+        /* Why Link */
+        .why-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .why-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 1em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .why-link:hover {
+            color: #764ba2;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(102, 126, 234, 0.2);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .greeting {
+                font-size: 2em;
+            }
+            
+            .vibe-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .recommendation-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">🧬 SynthAI</div>
+            <p class="tagline">Your AI guide for what to do, watch, play, and create—every single day.</p>
+        </header>
+        
+        <!-- Input Section -->
+        <section class="input-section">
+            <label class="input-label">How are you feeling right now?</label>
+            <textarea 
+                id="user-input" 
+                placeholder="I'm feeling scattered... / I have a big meeting today... / Just exploring..."
+            ></textarea>
+            <button class="sync-button" id="sync-button">Get Your Daily Sync</button>
+        </section>
+        
+        <!-- Loading State -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="color: #a0a0b0;">Analyzing your consciousness...</p>
+        </div>
+        
+        <!-- Daily Sync Result -->
+        <div class="daily-sync" id="daily-sync">
+            <!-- Greeting & Vibe -->
+            <div class="sync-card">
+                <h1 class="greeting" id="greeting">Good morning</h1>
+                <div class="vibe-section">
+                    <div class="vibe-emoji" id="vibe-emoji">✨</div>
+                    <div class="vibe-content">
+                        <h2 id="vibe-name">EXPLORER</h2>
+                        <p id="vibe-description">You're balanced and flexible today</p>
+                    </div>
+                </div>
+                
+                <!-- Energy Forecast -->
+                <div class="energy-section">
+                    <div class="energy-header">
+                        <h3 style="color: #ffffff; font-size: 1.2em;">⚡ Your Energy Today</h3>
+                        <span class="energy-level" id="energy-level">HIGH</span>
+                    </div>
+                    <p id="energy-advice" style="color: #a0a0b0; line-height: 1.6;">
+                        Your energy peaks in the morning. Schedule important work during 9am-2pm.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Recommendations -->
+            <div class="sync-card">
+                <h2 class="section-title">🎯 Curated For Your State</h2>
+                
+                <div class="recommendations-section">
+                    <!-- Video -->
+                    <div class="recommendation-card" id="rec-video">
+                        <div class="recommendation-header">
+                            <span class="recommendation-icon">📹</span>
+                            <div>
+                                <div class="recommendation-title" id="video-title">Loading...</div>
+                                <div class="recommendation-meta" id="video-meta">-</div>
+                            </div>
+                        </div>
+                        <p class="recommendation-description" id="video-description">-</p>
+                        <p class="match-reason">✓ <span id="video-reason">-</span></p>
+                    </div>
+                    
+                    <!-- Music -->
+                    <div class="recommendation-card" id="rec-music">
+                        <div class="recommendation-header">
+                            <span class="recommendation-icon">🎵</span>
+                            <div>
+                                <div class="recommendation-title" id="music-title">Loading...</div>
+                                <div class="recommendation-meta" id="music-meta">-</div>
+                            </div>
+                        </div>
+                        <p class="recommendation-description" id="music-description">-</p>
+                        <p class="match-reason">✓ <span id="music-reason">-</span></p>
+                    </div>
+                    
+                    <!-- Game -->
+                    <div class="recommendation-card" id="rec-game">
+                        <div class="recommendation-header">
+                            <span class="recommendation-icon">🎮</span>
+                            <div>
+                                <div class="recommendation-title" id="game-title">Loading...</div>
+                                <div class="recommendation-meta" id="game-meta">-</div>
+                            </div>
+                        </div>
+                        <p class="recommendation-description" id="game-description">-</p>
+                        <p class="match-reason">✓ <span id="game-reason">-</span></p>
+                    </div>
+                    
+                    <!-- Article -->
+                    <div class="recommendation-card" id="rec-article">
+                        <div class="recommendation-header">
+                            <span class="recommendation-icon">📚</span>
+                            <div>
+                                <div class="recommendation-title" id="article-title">Loading...</div>
+                                <div class="recommendation-meta" id="article-meta">-</div>
+                            </div>
+                        </div>
+                        <p class="recommendation-description" id="article-description">-</p>
+                        <p class="match-reason">✓ <span id="article-reason">-</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Intervention -->
+            <div class="intervention-section">
+                <h3 class="intervention-title">💊 Suggested Action</h3>
+                <div class="intervention-action" id="intervention-action">Start ONE project today</div>
+                <p class="intervention-reason" id="intervention-reason">Your coherence is low. You need focus.</p>
+            </div>
+            
+            <!-- Why Section -->
+            <div class="why-section">
+                <a href="#" class="why-link" id="why-link">
+                    Why these recommendations work →
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="daily-sync.js"></script>
+</body>
+</html>

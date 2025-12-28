@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynthAI - Consciousness Projector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        /* The Projector Canvas */
+        #projector {
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: #0a0a0a;
+        }
+        
+        /* UI Overlays Container */
+        #ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        #ui-overlay > * {
+            pointer-events: auto;
+        }
+        
+        /* Header */
+        #header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        #user-info {
+            color: #a0a0b0;
+            font-size: 14px;
+        }
+        
+        /* Mode Selector */
+        #mode-selector {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 12px;
+            border-radius: 50px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .mode-btn {
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .mode-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Coordinate Bar */
+        #coordinate-bar {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            padding: 18px 35px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            color: white;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .coord-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .coord-label {
+            font-size: 10px;
+            color: #a0a0b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .coord-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .coord-separator {
+            color: #2a2a3e;
+            font-size: 20px;
+        }
+        
+        /* Loading Indicator */
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #a0a0b0;
+            font-size: 14px;
+        }
+        
+        /* Mode Transition Effect */
+        .mode-transition {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+            animation: transitionPulse 0.6s ease-out;
+        }
+        
+        @keyframes transitionPulse {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.2); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            #mode-selector {
+                flex-wrap: wrap;
+                width: 90%;
+                justify-content: center;
+            }
+            
+            .mode-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+            
+            #coordinate-bar {
+                flex-wrap: wrap;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- The Projector Canvas -->
+    <canvas id="projector"></canvas>
+    
+    <!-- UI Overlays -->
+    <div id="ui-overlay">
+        <!-- Header -->
+        <div id="header">
+            <div id="logo">🧬 SynthAI</div>
+            <div id="user-info">Consciousness Projector v1.0</div>
+        </div>
+        
+        <!-- Mode Selector -->
+        <div id="mode-selector">
+            <button class="mode-btn active" data-mode="chat">💬 Chat</button>
+            <button class="mode-btn" data-mode="play">🎮 Play</button>
+            <button class="mode-btn" data-mode="view">🎨 View</button>
+            <button class="mode-btn" data-mode="make">🛠️ Make</button>
+            <button class="mode-btn" data-mode="meet">💕 Meet</button>
+            <button class="mode-btn" data-mode="learn">📚 Learn</button>
+        </div>
+        
+        <!-- Coordinate Bar -->
+        <div id="coordinate-bar">
+            <div class="coord-item">
+                <span class="coord-label">Coordinate</span>
+                <span class="coord-value" id="coordinate">-.-.-.-.-</span>
+            </div>
+            <span class="coord-separator">|</span>
+            <div class="coord-item">
+                <span class="coord-label">Gate</span>
+                <span class="coord-value" id="gate">-</span>
+            </div>
+            <span class="coord-separator">|</span>
+            <div class="coord-item">
+                <span class="coord-label">Dimension</span>
+                <span class="coord-value" id="dimension">-</span>
+            </div>
+            <span class="coord-separator">|</span>
+            <div class="coord-item">
+                <span class="coord-label">Coherence</span>
+                <span class="coord-value" id="coherence">-%</span>
+            </div>
+        </div>
+        
+        <!-- Loading Indicator -->
+        <div id="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Processing consciousness...</div>
+        </div>
+    </div>
+    
+    <!-- Mode Scripts -->
+    <script src="modes/ChatMode.js"></script>
+    <script src="modes/PlayMode.js"></script>
+    <script src="modes/ViewMode.js"></script>
+    <script src="modes/MakeMode.js"></script>
+    <script src="modes/MeetMode.js"></script>
+    <script src="modes/LearnMode.js"></script>
+    
+    <!-- Main Projector Engine -->
+    <script src="projector.js"></script>
+</body>
+</html>

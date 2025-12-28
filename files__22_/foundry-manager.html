@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foundry - Content Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            color: #a0a0b0;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: transparent;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .upload-zone {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border: 3px dashed rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            padding: 60px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .upload-zone:hover {
+            border-color: rgba(102, 126, 234, 0.8);
+            background: rgba(26, 26, 46, 0.8);
+        }
+        
+        .upload-zone.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .form-section {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(15, 15, 30, 0.8);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 1em;
+            font-family: inherit;
+        }
+        
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px;
+            background: rgba(15, 15, 30, 0.8);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 10px;
+            min-height: 50px;
+        }
+        
+        .tag {
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .tag-input input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 6px;
+            min-width: 100px;
+        }
+        
+        button {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .file-list {
+            margin-top: 20px;
+        }
+        
+        .file-item {
+            background: rgba(15, 15, 30, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .file-icon {
+            font-size: 2em;
+        }
+        
+        .results {
+            background: rgba(26, 26, 46, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .success {
+            color: #4ade80;
+        }
+        
+        .glyph {
+            font-family: 'Courier New', monospace;
+            background: rgba(102, 126, 234, 0.2);
+            padding: 4px 8px;
+            border-radius: 5px;
+            color: #667eea;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .upload-zone {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚗️ Foundry</h1>
+            <p class="tagline">Content Management & Knowledge Base</p>
+        </header>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-tab="knowledge">📚 Upload Knowledge</div>
+            <div class="tab" data-tab="pack">📦 Create Pack</div>
+            <div class="tab" data-tab="browse">🔍 Browse Library</div>
+        </div>
+        
+        <!-- Knowledge Upload Tab -->
+        <div class="tab-content active" id="knowledge">
+            <div class="upload-zone" id="knowledge-dropzone">
+                <div class="upload-icon">📤</div>
+                <h2>Drop Files Here</h2>
+                <p>Or click to browse</p>
+                <p style="color: #606070; margin-top: 10px;">
+                    Supported: PDFs, TXT, MD, DOCX, EPUB
+                </p>
+                <input type="file" id="knowledge-file" style="display: none;" multiple
+                       accept=".pdf,.txt,.md,.docx,.epub">
+            </div>
+            
+            <div class="form-section">
+                <h3 style="margin-bottom: 20px;">File Metadata</h3>
+                
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="knowledge-title" placeholder="Book or document title">
+                </div>
+                
+                <div class="form-group">
+                    <label>Author</label>
+                    <input type="text" id="knowledge-author" placeholder="Author name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="knowledge-category">
+                        <option value="books">Books</option>
+                        <option value="pdfs">PDFs</option>
+                        <option value="documents">Documents</option>
+                        <option value="user_uploads">User Uploads</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tags (press Enter to add)</label>
+                    <div class="tag-input" id="knowledge-tags">
+                        <input type="text" placeholder="Add tags..." id="tag-input">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="knowledge-description" placeholder="Optional description"></textarea>
+                </div>
+                
+                <button onclick="uploadKnowledge()">Upload to Foundry</button>
+            </div>
+            
+            <div class="file-list" id="knowledge-files"></div>
+        </div>
+        
+        <!-- Pack Creation Tab -->
+        <div class="tab-content" id="pack">
+            <div class="form-section">
+                <h3 style="margin-bottom: 20px;">Create New Pack</h3>
+                
+                <div class="form-group">
+                    <label>Pack Name</label>
+                    <input type="text" id="pack-name" placeholder="e.g., Meditation Pack">
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="pack-description" placeholder="What does this pack include?"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Author</label>
+                    <input type="text" id="pack-author" placeholder="Your name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Price (USD)</label>
+                    <input type="number" id="pack-price" placeholder="0.00" step="0.01" value="0.00">
+                </div>
+                
+                <div class="form-group">
+                    <label>Pack Type</label>
+                    <select id="pack-type">
+                        <option value="community">Community Pack</option>
+                        <option value="official">Official Pack</option>
+                    </select>
+                </div>
+                
+                <div class="upload-zone" id="pack-dropzone">
+                    <div class="upload-icon">📦</div>
+                    <h3>Add Pack Files</h3>
+                    <p>Drop files that belong to this pack</p>
+                    <input type="file" id="pack-files" style="display: none;" multiple>
+                </div>
+                
+                <div class="file-list" id="pack-file-list"></div>
+                
+                <button onclick="createPack()" style="margin-top: 20px;">Create Pack</button>
+            </div>
+        </div>
+        
+        <!-- Browse Tab -->
+        <div class="tab-content" id="browse">
+            <div class="form-section">
+                <h3 style="margin-bottom: 20px;">Search Library</h3>
+                
+                <div class="form-group">
+                    <input type="text" id="search-query" placeholder="Search knowledge base...">
+                </div>
+                
+                <button onclick="searchLibrary()">Search</button>
+            </div>
+            
+            <div id="search-results"></div>
+        </div>
+        
+        <!-- Results -->
+        <div class="results" id="results">
+            <h3 class="success">✅ Upload Successful!</h3>
+            <p style="margin-top: 15px;">Glyph ID: <span class="glyph" id="result-glyph"></span></p>
+            <p style="margin-top: 10px; color: #a0a0b0;">Content has been stored in the Foundry and is now available to the system.</p>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:5000';
+        let selectedFiles = [];
+        let packFiles = [];
+        let tags = [];
+        
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+        
+        // Knowledge upload zone
+        const knowledgeZone = document.getElementById('knowledge-dropzone');
+        const knowledgeInput = document.getElementById('knowledge-file');
+        
+        knowledgeZone.addEventListener('click', () => knowledgeInput.click());
+        
+        knowledgeZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            knowledgeZone.classList.add('dragover');
+        });
+        
+        knowledgeZone.addEventListener('dragleave', () => {
+            knowledgeZone.classList.remove('dragover');
+        });
+        
+        knowledgeZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            knowledgeZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files, 'knowledge');
+        });
+        
+        knowledgeInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files, 'knowledge');
+        });
+        
+        // Pack upload zone
+        const packZone = document.getElementById('pack-dropzone');
+        const packInput = document.getElementById('pack-files');
+        
+        packZone.addEventListener('click', () => packInput.click());
+        
+        packZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            packZone.classList.add('dragover');
+        });
+        
+        packZone.addEventListener('dragleave', () => {
+            packZone.classList.remove('dragover');
+        });
+        
+        packZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            packZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files, 'pack');
+        });
+        
+        packInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files, 'pack');
+        });
+        
+        // Tag input
+        const tagInput = document.getElementById('tag-input');
+        const tagsContainer = document.getElementById('knowledge-tags');
+        
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && tagInput.value.trim()) {
+                e.preventDefault();
+                addTag(tagInput.value.trim());
+                tagInput.value = '';
+            }
+        });
+        
+        function addTag(tag) {
+            tags.push(tag);
+            
+            const tagEl = document.createElement('div');
+            tagEl.className = 'tag';
+            tagEl.innerHTML = `
+                ${tag}
+                <span class="tag-remove" onclick="removeTag('${tag}')">×</span>
+            `;
+            
+            tagsContainer.insertBefore(tagEl, tagInput);
+        }
+        
+        function removeTag(tag) {
+            tags = tags.filter(t => t !== tag);
+            updateTags();
+        }
+        
+        function updateTags() {
+            tagsContainer.innerHTML = '';
+            tagsContainer.appendChild(tagInput);
+            tags.forEach(addTag);
+        }
+        
+        function handleFiles(files, type) {
+            const fileArray = Array.from(files);
+            
+            if (type === 'knowledge') {
+                selectedFiles = fileArray;
+                displayFiles(fileArray, 'knowledge-files');
+            } else {
+                packFiles = fileArray;
+                displayFiles(fileArray, 'pack-file-list');
+            }
+        }
+        
+        function displayFiles(files, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            files.forEach(file => {
+                const fileEl = document.createElement('div');
+                fileEl.className = 'file-item';
+                fileEl.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-icon">📄</div>
+                        <div>
+                            <div><strong>${file.name}</strong></div>
+                            <div style="color: #a0a0b0; font-size: 0.9em;">
+                                ${(file.size / 1024).toFixed(2)} KB
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(fileEl);
+            });
+        }
+        
+        async function uploadKnowledge() {
+            if (selectedFiles.length === 0) {
+                alert('Please select files to upload');
+                return;
+            }
+            
+            const formData = new FormData();
+            selectedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+            
+            formData.append('title', document.getElementById('knowledge-title').value);
+            formData.append('author', document.getElementById('knowledge-author').value);
+            formData.append('category', document.getElementById('knowledge-category').value);
+            formData.append('description', document.getElementById('knowledge-description').value);
+            formData.append('tags', JSON.stringify(tags));
+            
+            try {
+                const response = await fetch(`${API_URL}/foundry/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.glyph) {
+                    document.getElementById('result-glyph').textContent = result.glyph;
+                    document.getElementById('results').classList.add('show');
+                    
+                    // Clear form
+                    selectedFiles = [];
+                    tags = [];
+                    document.getElementById('knowledge-files').innerHTML = '';
+                    document.getElementById('knowledge-title').value = '';
+                    document.getElementById('knowledge-author').value = '';
+                    document.getElementById('knowledge-description').value = '';
+                    updateTags();
+                }
+            } catch (error) {
+                alert('Upload failed: ' + error.message);
+            }
+        }
+        
+        async function createPack() {
+            const name = document.getElementById('pack-name').value;
+            const description = document.getElementById('pack-description').value;
+            const author = document.getElementById('pack-author').value;
+            const price = parseFloat(document.getElementById('pack-price').value);
+            const type = document.getElementById('pack-type').value;
+            
+            if (!name || !description || !author) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const formData = new FormData();
+            packFiles.forEach(file => {
+                formData.append('files', file);
+            });
+            
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('author', author);
+            formData.append('price', price);
+            formData.append('pack_type', type);
+            
+            try {
+                const response = await fetch(`${API_URL}/foundry/pack`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.glyph) {
+                    document.getElementById('result-glyph').textContent = result.glyph;
+                    document.getElementById('results').classList.add('show');
+                    
+                    // Clear form
+                    packFiles = [];
+                    document.getElementById('pack-file-list').innerHTML = '';
+                    document.getElementById('pack-name').value = '';
+                    document.getElementById('pack-description').value = '';
+                    document.getElementById('pack-author').value = '';
+                    document.getElementById('pack-price').value = '0.00';
+                }
+            } catch (error) {
+                alert('Pack creation failed: ' + error.message);
+            }
+        }
+        
+        async function searchLibrary() {
+            const query = document.getElementById('search-query').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/foundry/search?q=${encodeURIComponent(query)}`);
+                const results = await response.json();
+                
+                const resultsContainer = document.getElementById('search-results');
+                resultsContainer.innerHTML = '<div class="form-section"><h3>Search Results</h3></div>';
+                
+                if (results.length === 0) {
+                    resultsContainer.innerHTML += '<p style="color: #606070;">No results found.</p>';
+                    return;
+                }
+                
+                results.forEach(item => {
+                    const resultEl = document.createElement('div');
+                    resultEl.className = 'file-item';
+                    resultEl.innerHTML = `
+                        <div class="file-info">
+                            <div class="file-icon">📚</div>
+                            <div>
+                                <div><strong>${item.user_metadata.title || item.original_filename}</strong></div>
+                                <div style="color: #a0a0b0; font-size: 0.9em;">
+                                    ${item.user_metadata.author || 'Unknown author'}
+                                </div>
+                                <div style="color: #667eea; font-size: 0.85em; margin-top: 5px;">
+                                    Glyph: ${item.glyph}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(resultEl);
+                });
+            } catch (error) {
+                alert('Search failed: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
